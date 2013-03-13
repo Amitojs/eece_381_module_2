@@ -39,7 +39,6 @@ Wave* wavInit(void){
  * The returned file must be deallocated with free.
  */
 Wave* isWav(char* filename){
-
 	char fileheader[WAV_OFFSET];
 	char* fileheaderptr = &fileheader[0];
 	if(file_read(fileheaderptr, filename, WAV_OFFSET)<0){
@@ -50,9 +49,10 @@ Wave* isWav(char* filename){
 	else
 		return NULL;
 	Wave* File = malloc(sizeof(Wave));
-	File->datasize = fileheader[40]/2;//The size of the data is stored in words to make further operations easier
+	File->datasize = (unsigned char)fileheader[40]+(unsigned char)fileheader[41]*256+(unsigned char)fileheader[42]*65536;
+	printf("40 is %02hhX, 41 is %02hhX, 42 is %02hhX\n", fileheader[40], fileheader[41], fileheader[42]);
 	File->channels = fileheader[22];
-	File->samplerate = fileheader[24];
+	File->samplerate = (unsigned char)fileheader[24]+(unsigned char)fileheader[25]*256+(unsigned char)fileheader[26]*65536;
 	File->samplesize = fileheader[34];
 	File->filename = filename;
 	return File;
@@ -88,21 +88,21 @@ int getPlayable(void){
  * 0 if the file has played
  * Best used with the [Wave]->filename operator
  */
-int playSong(char* filename){
-	Wave* Song = isWav(filename);
+int playSong(Wave* Song){
 	if(Song == NULL){
 		return -1;
 	}
 	int songOffsetL = WAV_OFFSET;
 	int songOffsetR = WAV_OFFSET;
 	char* currentSong = malloc(Song->datasize+WAV_OFFSET);
-	file_read((char*)currentSong, Song->filename, Song->datasize+WAV_OFFSET);
+	file_read(currentSong+1, Song->filename, Song->datasize+WAV_OFFSET-1);
 	while(Song->datasize-songOffsetR > 0 && Song->datasize-songOffsetL > 0){
-		songOffsetR = songOffsetR + alt_up_audio_play_r(audio_dev, (unsigned int*)(currentSong+songOffsetR), Song->datasize-songOffsetR);
-		songOffsetL = songOffsetL + alt_up_audio_play_l(audio_dev, (unsigned int*)(currentSong+songOffsetR), Song->datasize-songOffsetL);
+		songOffsetR += 2*alt_up_audio_play_r(audio_dev, (unsigned int*)(currentSong+songOffsetR), Song->datasize-songOffsetR);
+		songOffsetL += 2*alt_up_audio_play_l(audio_dev, (unsigned int*)(currentSong+songOffsetL), Song->datasize-songOffsetL);
 	}
+	alt_up_audio_reset_audio_core(audio_dev);
 	free(currentSong);
-	free(Song);
+
 	return 0;
 }
 
