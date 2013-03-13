@@ -25,7 +25,7 @@
 void sd_init(void){
 
 	alt_up_sd_card_dev *device_reference = NULL;
-	device_reference = alt_up_sd_card_open_dev("/dev/Altera_UP_SD_Card_Avalon_Interface_0");
+	device_reference = alt_up_sd_card_open_dev(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
 }
 
 

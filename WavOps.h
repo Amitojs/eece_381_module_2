@@ -23,7 +23,7 @@ Wave* wavInit(void);
 //Prototype for the wave format checker
 Wave* isWav(char* filename);
 //Prototype for song retrieval
-int getPlayable(char*);
+int getPlayable(void);
 //Prototype for song playback
 int playSong(char* filename);
 //Prototype for refreshing SD card

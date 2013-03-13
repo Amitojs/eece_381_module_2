@@ -12,6 +12,7 @@
 #include <string.h>
 #include "FileStructs.h"
 #include <altera_up_avalon_audio.h>
+#include "system.h"
 
 
 /*
@@ -22,15 +23,14 @@
 
 Wave* wavInit(void){
 
-	Wave* Wavearr[]= malloc(SONGS_MAX*sizeof(Wave*));
-	Wave* Waveptr = &Wavearr[0];
-	audio_dev = alt_up_audio_open_dev ("/dev/audio");
+	Wave* Wavearr= malloc(SONGS_MAX*sizeof(Wave*));
+	audio_dev = alt_up_audio_open_dev (AUDIO_NAME);
 	alt_up_audio_disable_read_interrupt(audio_dev);
 	alt_up_audio_enable_write_interrupt(audio_dev);
 	if ( audio_dev == NULL){
 		return NULL;
 	}
-	return Waveptr;
+	return Wavearr;
 }
 /*
  * Checks to see if the filename it takes exists and that it is a .wav file.
@@ -38,12 +38,12 @@ Wave* wavInit(void){
  * If it is not a .wav file or the file does not exist, the pointer is NULL.
  * The returned file must be deallocated with free.
  */
-
-
 Wave* isWav(char* filename){
 
 	char fileheader[WAV_OFFSET];
-	if(file_read(fileheader, filename, WAV_OFFSET)<0){
+	char* fileheaderptr = &fileheader[0];
+	if(file_read(fileheaderptr, filename, WAV_OFFSET)<0){
+		printf("Could not find the specified file\n");
 		return NULL;
 	}
 	if((fileheader[8] == 'W') && fileheader[9] == 'A' && fileheader [10] == 'V' && fileheader[11] == 'E');
@@ -63,20 +63,23 @@ Wave* isWav(char* filename){
  * If it returns 0, no wav files were found
  * If it returns a negative number, an error has occured
  * If there are more than 512 files on the SD card, returns the first 512 files found
- * Takes a single argument, a point to an array of pointers to structs. This pointer should be initialized with malloc
  */
 
-int getPlayable(char* Songarr){
+int getPlayable(void){
 
 	char namearr[SONGS_MAX*13];
 	int wavcnt = 0;
 	char* namearrptr = &namearr[0];
 	filenames_read(namearrptr, SONGS_MAX*13);
-	if(strtok(namearr, "wav") != NULL){
+	namearrptr = strtok(namearr, "wav");
+	if(namearrptr != NULL){
 		wavcnt++;
+		printf("One song added\n");
 	}
-	while(strtok(NULL, "wav") != NULL){
+	while(namearrptr != NULL){
+		printf("Another song added\n");
 		wavcnt++;
+		namearrptr = strtok(NULL, "wav");
 	}
 	return wavcnt;
 }
@@ -93,15 +96,13 @@ int playSong(char* filename){
 	int songOffsetL = WAV_OFFSET;
 	int songOffsetR = WAV_OFFSET;
 	char* currentSong = malloc(Song->datasize+WAV_OFFSET);
-	file_read(currentSong, Song->filename, Song->datasize+WAV_OFFSET);
-	int i = Song->datasize;
-
-	while(i > 0){
-		songOffsetR = songOffsetR + alt_up_audio_play_r(audio_dev, currentSong+songOffsetR, Song->datasize-songOffsetR);
-		songOffsetL = songOffsetL + alt_up_audio_play_l(audio_dev, currentSong+songOffsetR, Song->datasize-songOffsetL);
-
+	file_read((char*)currentSong, Song->filename, Song->datasize+WAV_OFFSET);
+	while(Song->datasize-songOffsetR > 0 && Song->datasize-songOffsetL > 0){
+		songOffsetR = songOffsetR + alt_up_audio_play_r(audio_dev, (unsigned int*)(currentSong+songOffsetR), Song->datasize-songOffsetR);
+		songOffsetL = songOffsetL + alt_up_audio_play_l(audio_dev, (unsigned int*)(currentSong+songOffsetR), Song->datasize-songOffsetL);
 	}
 	free(currentSong);
+	free(Song);
 	return 0;
 }
 
@@ -110,6 +111,5 @@ int playSong(char* filename){
  * array of pointers to structs of "Wave" and returns void.
  */
 void refreshSongs(char* Songarr){
-
 
 }
