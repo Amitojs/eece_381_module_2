@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 2.0.0
+ *      Version: 3.0.0
  *
  *
  */
@@ -18,12 +18,116 @@
 #include "alt_types.h"
 #include "sys/alt_irq.h"
 #include "altera_avalon_timer_regs.h"
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+//-----------------------------------
+llist *head = NULL;
+llist *curr = NULL;
+//-----------------------------------
+rsinfo a;
+//-----------------------------------
 
 
-// This funciton will be called on even interval of TIMER_INTERVAL
+// For testing poirposes
+// Prints the contents of the linked list to stdout
+void print_list(void){
+    llist *ptr = head;
+
+    printf("\n -------Printing list Start------- \n");
+    while(ptr != NULL)
+    {
+        printf("\n [%s] \n",ptr->message);
+        ptr = ptr->next;
+    }
+    printf("\n -------Printing list End------- \n");
+
+    return;
+}
+
+
+
+// Creates a list with the specified message as the head of the list
+llist* create_list(unsigned char message[]){
+	int i;
+	//printf("\n creating list with headnode as [%d]\n",val);
+	llist *ptr = (llist*)malloc(sizeof(llist));
+	if(NULL == ptr){
+		printf("\n Node creation failed \n");
+		return NULL;
+	}
+	for (i=0;i<MAX_STRING_SIZE; i++){
+		ptr->message[i] = message[i];
+	}
+	ptr->next = NULL;
+
+	head = curr = ptr;
+	return ptr;
+}
+
+
+// Adds a node to head or end of the Linked List
+llist* add_to_list(unsigned char message[], bool add_to_end){
+	if(NULL == head){
+		return (create_list(message));
+	}
+	int i = 0;
+
+	llist *ptr = (llist*)malloc(sizeof(llist));
+	if(NULL == ptr){
+		printf("\n Node creation failed \n");
+		return NULL;
+	}
+
+	for (i=0;i<MAX_STRING_SIZE; i++){
+		ptr->message[i] = message[i];
+	}
+	ptr->next = NULL;
+
+	if(add_to_end){
+		curr->next = ptr;
+		curr = ptr;
+	}
+	else{
+		ptr->next = head;
+		head = ptr;
+	}
+	return ptr;
+}
+
+
+// Deletes and frees the head of the Linked List
+void delete_head_from_list(){
+	llist *del = NULL;
+
+	//printf("\n Deleting head node from list.\n");
+
+	del = head;
+	head = del->next;
+	free(del);
+	del = NULL;
+}
+
+
+
+
+// This funciton will be called on every interval of TIMER_INTERVAL
 void timed_function(){
-	//TODO: Do something useful with this interval
-	printf("hi");
+	if (alt_up_rs232_get_used_space_in_read_FIFO(a.uart) == 0){
+		//printf("\nNo message.\n");
+		return;
+	}
+	else {
+		printf("\nGot a message: ");
+	}
+
+	unsigned char message[MAX_STRING_SIZE] = "";
+	unsigned char* message_ptr = message;
+
+	rsrecieve( message_ptr );
+
+	add_to_list(message, true);
 }
 
 
@@ -31,7 +135,7 @@ void timed_function(){
 // IE, this is the ISR. It will call timed_function() to do something useful,
 // then it will re-build the timer, and set it.
 void handle_timer_interrupt (void* context, alt_u32 id){
-	int timer_period = TIMER_INTERVAL * 50000000;
+	int timer_period = TIMER_INTERVAL * 50000;
 
 	// Stop timer
 	IOWR_16DIRECT(MY_HW_ONLY_TIMER_BASE, 4, 1 << 3);
@@ -56,7 +160,7 @@ void handle_timer_interrupt (void* context, alt_u32 id){
 // In addition, registers the timer interrupt handler.
 void setup_timer(){
 	int status;
-	int timer_period = TIMER_INTERVAL * 50000000;
+	int timer_period = TIMER_INTERVAL * 50000;
 
 	// Register the timer interrupt handler
 	alt_irq_register(1, 0, handle_timer_interrupt);
@@ -102,7 +206,7 @@ void append ( unsigned char* s, char c ) {
 
 // Initialize the RS232 connection & struct
 rsinfo rsinit (  ) {
-	rsinfo a;
+
 	printf("UART Initialization\n");
 	a.uart = alt_up_rs232_open_dev(RS232_0_NAME);
 	return a;
@@ -110,7 +214,7 @@ rsinfo rsinit (  ) {
 
 
 // Send data over the RS232
-void rssend ( rsinfo a, unsigned char message[] ){
+void rssend ( unsigned char message[] ){
 	int i = 0;
 
 	//printf("Clearing read buffer to start\n");
@@ -132,11 +236,15 @@ void rssend ( rsinfo a, unsigned char message[] ){
 
 // Pull data from the RS232
 // Currently waits until data is present, then reads.
-void rsrecieve ( rsinfo a, unsigned char* s1_ptr ) {
+void rsrecieve ( unsigned char* s1_ptr ) {
 	int i = 0;
+	bool flag = true;
 
-	printf("Waiting for data...\n");
 	while (alt_up_rs232_get_used_space_in_read_FIFO(a.uart) == 0){
+		if (flag == true) {
+			printf("Waiting for data...\n");
+			flag = false;
+		}
 		//do nothing
 	}
 
@@ -144,7 +252,7 @@ void rsrecieve ( rsinfo a, unsigned char* s1_ptr ) {
 	alt_up_rs232_read_data(a.uart, &a.data, &a.parity);
 	int num_to_receive = (int)a.data;
 
-	printf("Receiving %d characters:\n'", num_to_receive);
+	//printf("Receiving %d characters:\n'", num_to_receive);
 
 	for (i = 0; i < num_to_receive; i++) {
 		while (alt_up_rs232_get_used_space_in_read_FIFO(a.uart) == 0);
@@ -153,5 +261,5 @@ void rsrecieve ( rsinfo a, unsigned char* s1_ptr ) {
 		append(s1_ptr, a.data);
 		printf("%c", a.data);
 	}
-	printf("'\n");
+	printf("\n");
 }

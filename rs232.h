@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 2.0.0
+ *      Version: 3.0.0
  *
  *
  */
@@ -28,7 +28,7 @@ int main()
 	unsigned char* s1_ptr = s1;
 
 	// Initialize the rs232 connection & struct
-	rsinfo a = rsinit();
+	rsinit();
 
 	for(;;){
 		// Clear any string data
@@ -36,7 +36,7 @@ int main()
 		s1[0] = '\0';
 
 		// Receive the message from the Middleman
-		rsrecieve(a, s1_ptr);
+		rsrecieve( s1_ptr );
 
 		// Take the string and reorganize it backwards
 		for (i = 0; i <= strlen( (char*)s1 ); i++){
@@ -46,7 +46,7 @@ int main()
 		//printf("Sending message: '%s'\n", message);
 
 		// Send the message to the Middleman
-		rssend( a, message );
+		rssend( message );
 	}
 	return 0;
 }
@@ -65,16 +65,20 @@ Sample use = Using timer to check for data
 #include "altera_avalon_timer_regs.h"
 
 int main(){
-	int i=0;
+	int i;
 
 	setup_timer();
+	rsinit();
 
-	//TODO:
-	//@@@@WORK IN PROGRESS@@@
-	for(;;) {
-		i++;
-		if (i%100000 == 0) printf(".");
+	print_list();
+
+	for ( i = 0; i<10000000; i++ ){
+		if (i%50000 == 0)
+			printf(".");
 	}
+	printf("end");
+
+	print_list();
 
 	return 0;
 }
@@ -89,30 +93,54 @@ int main(){
 #define RS232_H_
 
 #include "altera_up_avalon_rs232.h"
+#include <stdbool.h>
+
+
 
 //String size of data rec/sent
-#define MAX_STRING_SIZE 265
+#define MAX_STRING_SIZE 64
 
 //Base address of timer
 #define MY_HW_ONLY_TIMER_BASE 0x1000
 
-// Interval of timer checking
-#define TIMER_INTERVAL 5
+// Interval of timer checking in ms
+#define TIMER_INTERVAL 500
 
+
+
+//--- Structs ---
 typedef struct{
 	alt_up_rs232_dev* uart;
 	unsigned char data;
 	unsigned char parity;
 } rsinfo;
 
-void 	rssend					( rsinfo a, unsigned char message[] );
+typedef struct llist{
+	unsigned char message[MAX_STRING_SIZE];
+    struct llist *next;
+} llist;
+
+
+
+//--- RS232 stuff ---
+void 	rssend					( unsigned char message[] );
 void 	append					( unsigned char* s, char c );
-void 	rsrecieve				( rsinfo a, unsigned char* s1_ptr );
+void 	rsrecieve				( unsigned char* s1_ptr );
 rsinfo 	rsinit					(  );
+
+
+//--- Timer stuff ---
 void 	timed_function			(  );
 void 	handle_timer_interrupt 	( void* context, alt_u32 id );
 void 	setup_timer				(  );
 void 	kill_timer				(  );
+
+
+//--- Linked list stuff ---
+void 	delete_head_from_list	(  );
+llist* 	add_to_list				( unsigned char message[], bool add_to_end );
+llist* 	create_list				( unsigned char message[] );
+void 	print_list				(  );
 
 
 #endif /* RS232_H_ */
