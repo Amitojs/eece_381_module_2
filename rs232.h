@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 3.0.0
+ *      Version: 3.0.1
  *
  *
  */
@@ -98,7 +98,7 @@ int main(){
 
 
 //String size of data rec/sent
-#define MAX_STRING_SIZE 64
+#define MAX_STRING_SIZE 32
 
 //Base address of timer
 #define MY_HW_ONLY_TIMER_BASE 0x1000
@@ -141,6 +141,7 @@ void 	delete_head_from_list	(  );
 llist* 	add_to_list				( unsigned char message[], bool add_to_end );
 llist* 	create_list				( unsigned char message[] );
 void 	print_list				(  );
+llist*	get_head				(  );
 
 
 #endif /* RS232_H_ */

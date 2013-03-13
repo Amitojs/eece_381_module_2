@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 1.0.0
+ *      Version: 1.1.0
  *
  *
  */
@@ -61,7 +61,12 @@ command* consume_message( llist *head ){
 
 // For testing poirposes
 // Prints out the contents of a command
-void print_command( command* c ){
-	printf("\nAction: %d\n", c->action);
-	printf("Note: %s\n", c->my_note);
+// nozero - does not print out command if action is zero
+void print_command( command* c , bool nozero){
+	if (nozero == true && c->action == 0){
+		//do nothing
+	}else{
+		printf("\nAction: %d\n", c->action);
+		printf("Note: %s\n", c->my_note);
+	}
 }

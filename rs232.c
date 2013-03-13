@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 3.0.0
+ *      Version: 3.0.1
  *
  *
  */
@@ -33,19 +33,21 @@ rsinfo a;
 // For testing poirposes
 // Prints the contents of the linked list to stdout
 void print_list(void){
-    llist *ptr = head;
+	llist *ptr = head;
 
-    printf("\n -------Printing list Start------- \n");
-    while(ptr != NULL)
-    {
-        printf("\n [%s] \n",ptr->message);
-        ptr = ptr->next;
-    }
-    printf("\n -------Printing list End------- \n");
+	printf("\n -------Printing list Start------- \n");
+	while(ptr != NULL){
+		printf("\n [%s] \n",ptr->message);
+		ptr = ptr->next;
+	}
+	printf("\n -------Printing list End------- \n");
 
-    return;
+	return;
 }
 
+llist* get_head(){
+	return head;
+}
 
 
 // Creates a list with the specified message as the head of the list
