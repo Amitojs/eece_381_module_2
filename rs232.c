@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 3.0.1
+ *      Version: 3.1.0
  *
  *
  */
@@ -25,6 +25,7 @@
 //-----------------------------------
 llist *head = NULL;
 llist *curr = NULL;
+bool llguard = false;
 //-----------------------------------
 rsinfo a;
 //-----------------------------------
@@ -45,6 +46,8 @@ void print_list(void){
 	return;
 }
 
+// Gives access to the head pointer of the llist. 
+// Possibly (?) neccessary for other files to have access.
 llist* get_head(){
 	return head;
 }
@@ -71,12 +74,15 @@ llist* create_list(unsigned char message[]){
 
 // Adds a node to head or end of the Linked List
 llist* add_to_list(unsigned char message[], bool add_to_end){
+	int i = 0;
+	llguard = true;
+	
 	if(NULL == head){
 		return (create_list(message));
 	}
-	int i = 0;
 
 	llist *ptr = (llist*)malloc(sizeof(llist));
+	
 	if(NULL == ptr){
 		printf("\n Node creation failed \n");
 		return NULL;
@@ -95,6 +101,8 @@ llist* add_to_list(unsigned char message[], bool add_to_end){
 		ptr->next = head;
 		head = ptr;
 	}
+	
+	llguard = false;
 	return ptr;
 }
 
@@ -102,6 +110,7 @@ llist* add_to_list(unsigned char message[], bool add_to_end){
 // Deletes and frees the head of the Linked List
 void delete_head_from_list(){
 	llist *del = NULL;
+	llguard = true;
 
 	//printf("\n Deleting head node from list.\n");
 
@@ -109,6 +118,7 @@ void delete_head_from_list(){
 	head = del->next;
 	free(del);
 	del = NULL;
+	llguard = false;
 }
 
 
@@ -127,9 +137,13 @@ void timed_function(){
 	unsigned char message[MAX_STRING_SIZE] = "";
 	unsigned char* message_ptr = message;
 
-	rsrecieve( message_ptr );
+	if (llguard == false){
+		rsrecieve( message_ptr );
+		add_to_list(message, true);
+	}else
+		printf("Attempted to modify the list while the main thread was modifying it.\nIf this happens often, that is bad.");
 
-	add_to_list(message, true);
+	
 }
 
 
@@ -192,6 +206,7 @@ void kill_timer(){
 	// Stop the timer
 	//int status = IORD_16DIRECT(MY_HW_ONLY_TIMER_BASE, 0);
 	//if (status & 0x2) {
+	
 	// Force stop timer
 	IOWR_16DIRECT(MY_HW_ONLY_TIMER_BASE, 4, 1 << 3);
 	printf("Stopping Timer\n");

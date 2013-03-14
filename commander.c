@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 1.1.0
+ *      Version: 1.2.0
  *
  *
  */
@@ -20,7 +20,63 @@
 #include <stdlib.h>
 
 
+// Completes an action from a command.
+// Returns true if successful, false if the action is unknown.
+bool do_command( command* c ){
+	if ( c->action == 0 ){
+		return false;
+	}else if ( c->action == 1 ){
+		switch ( c->my_note[0] ){
+			case 'A':
+				if (my_note[1] == 'S')
+					// play A sharp
+				else
+					// play A
+				break;
+			case 'B':
+					// play B
+				break;
+			case 'C':
+				if (my_note[1] == 'S')
+					// play C sharp
+				else
+					// play C
+				break;
+			case 'D':
+				if (my_note[1] == 'S')
+					// play D sharp
+				else
+					// play D
+				break;
+			case 'E':
+					// play E
+				break;
+			case 'F':
+				if (my_note[1] == 'S')
+					// play F sharp
+				else
+					// play F
+				break;
+			case 'G':
+				if (my_note[1] == 'S')
+					// play G sharp
+				else
+					// play G
+				break;
+		}
+		return true;
+	}else if ( c->action == 2 ){
+		//Do action 2...
+		//return true;
+	}
+	//No known action
+	return false;
+}
 
+
+// Consumes a message from the linked list, and gives back a (pointer to a)
+// struct containing the parsed info.
+// Remember to free the struct after parsing it and using it.
 command* consume_message( llist *head ){
 	int i = 0;
 	command* c = (command*)malloc(sizeof(command));

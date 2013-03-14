@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 1.1.0
+ *      Version: 1.2.0
  *
  *
  */
@@ -67,5 +67,6 @@ typedef struct command{
 //--- Functions used by the command structure
 void		print_command	( command* c, bool nozero );
 command*	consume_message	( llist *head );
+bool 		do_command		( command* c );
 
 #endif /* COMMANDER_H_ */
