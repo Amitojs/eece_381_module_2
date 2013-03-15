@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 3.1.0
+ *      Version: 3.1.1
  *
  *
  */
@@ -98,7 +98,7 @@ int main(){
 
 
 //String size of data rec/sent
-#define MAX_STRING_SIZE 16
+#define MAX_STRING_SIZE 8
 
 //Base address of timer
 #define MY_HW_ONLY_TIMER_BASE 0x1000

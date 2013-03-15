@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 3.1.0
+ *      Version: 3.1.1
  *
  *
  */
@@ -75,10 +75,13 @@ llist* create_list(unsigned char message[]){
 // Adds a node to head or end of the Linked List
 llist* add_to_list(unsigned char message[], bool add_to_end){
 	int i = 0;
+	llist* retval;
 	llguard = true;
 	
 	if(NULL == head){
-		return (create_list(message));
+		retval = create_list(message);
+		llguard = false;
+		return retval;
 	}
 
 	llist *ptr = (llist*)malloc(sizeof(llist));
