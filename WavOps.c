@@ -12,6 +12,7 @@
 #include <string.h>
 #include "FileStructs.h"
 #include <altera_up_avalon_audio.h>
+#include "altera_up_avalon_audio_and_video_config.h"
 #include "system.h"
 
 
@@ -19,20 +20,25 @@
  * Initializes the audio output interface and creates an array to store pointers. Every pointer needs to be malloc'd
  * so that only as much memory as is needed to store the active songs is used. Returns a pointer to the array of songs
  * or a NULL pointer if the audio interface could not be initialized. This pointer should be freed when it is no longer used.
+ * If the function returns NULL something seriously wrong has occured.
  */
 
 Wave** wavInit(void){
 
 	Wave** wavArr = malloc(SONGS_MAX*sizeof(Wave*));
 	audio_dev = alt_up_audio_open_dev (AUDIO_NAME);
+	if ( audio_dev == NULL){
+		return NULL;
+	}
 	alt_up_audio_disable_read_interrupt(audio_dev);
 	alt_up_audio_enable_write_interrupt(audio_dev);
-	if ( audio_dev == NULL){
+	if( audio_dev == NULL){
 		return NULL;
 	}
 	refreshSongs(wavArr);
 	return wavArr;
 }
+
 /*
  * Checks to see if the filename it takes exists and that it is a .wav file.
  * If it is, returns a pointer to a struct containing the file info

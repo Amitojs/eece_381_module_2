@@ -15,30 +15,44 @@
 int main(void){
 
 	sd_init();
-	int wavPos = 0;
+	int songCount = getPlayable();
 	int i;
 	//Testing WavInit
-	Wave* wavArr = wavInit();
-
+	Wave** wavArr = wavInit();
+	if(wavArr == NULL){
+		printf("The array was not built successfully, terminating");
+	}
 	//Testing the building of the array of songs
-	Wave* arrPos = wavArr+wavPos;
-	if(wavArr == NULL);
-	else
-	arrPos = isWav("boing.wav");
-	//printf("\n");
+	else{
+	}
+	*wavArr = isWav("dingding.wav");
+	*(wavArr+1) = isWav("boing.wav");
 	printf("The information for the .wav is:\n");
-	printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",(arrPos)->datasize, (arrPos)->channels,
-			(arrPos)->filename,(arrPos)->samplerate, (arrPos)->samplesize);
+	printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",(*wavArr)->datasize, (*wavArr)->channels,
+			(*wavArr)->filename,(*wavArr)->samplerate, (*wavArr)->samplesize);
+	printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",(*(wavArr+1))->datasize, (*(wavArr+1))->channels,
+			(*(wavArr+1))->filename,(*(wavArr+1))->samplerate, (*(wavArr+1))->samplesize);
 
 	//Testing the .wav total retrieval
 	printf("The number of .wavs present on the sd card is: %d\n", getPlayable());
 
 	//Testing song playback
-	for(i=0; i<2; i++){
-		playSong(arrPos);
+	for(i=0; i<songCount; i++){
+		playSong(*(wavArr+i));
+		playSong(*(wavArr+i));
 	}
-	free(arrPos);
+
+	//Free the memory allocated to song data and the song array itself
+	for(i=0; i<songCount; i++){
+		free(*(wavArr+i));
+	}
 	free(wavArr);
+
+	//Testing song playback continued - filenames
+	printf("Now playing named\n");
+	if(playSongNamed("dingding.wav")!= 0){
+		printf("This failed horribly\n");
+	}
 	return 0;
 }
 
