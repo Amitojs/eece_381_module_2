@@ -95,19 +95,16 @@ int playSong(Wave* Song){
 
 	unsigned char* currentSong = malloc((Song->datasize+WAV_OFFSET)*sizeof(char));
 	file_read((char*)(currentSong), Song->filename, Song->datasize+WAV_OFFSET);
-	/*
-	short* temp2 = (short*)&currentSong[WAV_OFFSET];
-	unsigned short* temp = (unsigned short*)&currentSong[WAV_OFFSET];
 
-	int i;
-	printf("%d, %u\n", temp2[0], temp[0]);
-	for (i=0; i<(Song->datasize/2); i++){
-		temp[i]= temp2[i]+(32768);
-	}
-	printf("%d, %u\n", temp2[0], temp[0]);
-	*/
 	unsigned int rightOffset = WAV_OFFSET;
 	unsigned int leftOffset = WAV_OFFSET;
+	int i;
+	for(i=0;i<Song->datasize;i+= 2){
+		char temp;
+		swapped = currentSong[i+1];
+		currentSong[i+1] = currentSong[i];
+		currentSong[i] = temp;
+	}
 	alt_up_audio_reset_audio_core( audio_dev );
 	while (rightOffset < Song->datasize && leftOffset < Song->datasize){
 		//rightOffset += alt_up_audio_write_fifo(audio_dev, (unsigned int*)(&currentSong[rightOffset]), (Song->datasize-rightOffset), ALT_UP_AUDIO_RIGHT);
