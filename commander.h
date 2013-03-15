@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 1.2.0
+ *      Version: 1.3.0
  *
  *
  */
@@ -55,6 +55,21 @@ int main(){
 #define COMMANDER_H_
 
 #include "rs232.h"
+
+
+#define afile  "a.wav"
+#define asfile "as.wav"
+#define bfile  "b.wav"
+#define cfile  "c.wav"
+#define csfile "cs.wav"
+#define dfile  "d.wav"
+#define dsfile "ds.wav"
+#define efile  "e.wav"
+#define ffile  "f.wav"
+#define fsfile "fs.wav"
+#define gfile  "g.wav"
+#define gsfile "gs.wav"
+
 
 
 //--- The structure for a message to be sent/recieved ---

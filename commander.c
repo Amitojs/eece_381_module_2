@@ -5,13 +5,14 @@
  *      Author: Scott
  *
  *
- *      Version: 1.2.0
+ *      Version: 1.3.0
  *
  *
  */
 
 #include "rs232.h"
 #include "commander.h"
+#include "WavOps.h"
 #include <stdio.h>
 #include <string.h>
 #include <io.h>
@@ -28,41 +29,41 @@ bool do_command( command* c ){
 	}else if ( c->action == 1 ){
 		switch ( c->my_note[0] ){
 			case 'A':
-				if (my_note[1] == 'S')
-					// play A sharp
-				else
-					// play A
-				break;
+				if (c->my_note[1] == 'S'){
+					playSongNamed( asfile );
+				}else{
+					playSongNamed( afile );
+				}break;
 			case 'B':
-					// play B
+				playSongNamed( bfile );
 				break;
 			case 'C':
-				if (my_note[1] == 'S')
-					// play C sharp
-				else
-					// play C
-				break;
+				if (c->my_note[1] == 'S'){
+					playSongNamed( csfile );
+				}else{
+					playSongNamed( cfile );
+				}break;
 			case 'D':
-				if (my_note[1] == 'S')
-					// play D sharp
-				else
-					// play D
-				break;
+				if (c->my_note[1] == 'S'){
+					playSongNamed( dsfile );
+				}else{
+					playSongNamed( dfile );
+				}break;
 			case 'E':
-					// play E
+				playSongNamed( efile );
 				break;
 			case 'F':
-				if (my_note[1] == 'S')
-					// play F sharp
-				else
-					// play F
-				break;
+				if (c->my_note[1] == 'S'){
+					playSongNamed( fsfile );
+				}else{
+					playSongNamed( ffile );
+				}break;
 			case 'G':
-				if (my_note[1] == 'S')
-					// play G sharp
-				else
-					// play G
-				break;
+				if (c->my_note[1] == 'S'){
+					playSongNamed( gsfile );
+				}else{
+					playSongNamed( gfile );
+				}break;
 		}
 		return true;
 	}else if ( c->action == 2 ){

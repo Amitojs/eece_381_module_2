@@ -98,13 +98,13 @@ int main(){
 
 
 //String size of data rec/sent
-#define MAX_STRING_SIZE 32
+#define MAX_STRING_SIZE 16
 
 //Base address of timer
 #define MY_HW_ONLY_TIMER_BASE 0x1000
 
 // Interval of timer checking in ms
-#define TIMER_INTERVAL 500
+#define TIMER_INTERVAL 250
 
 
 
