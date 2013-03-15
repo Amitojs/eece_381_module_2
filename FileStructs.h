@@ -14,10 +14,10 @@
 #define WAV_OFFSET 44
 
 typedef struct {
-   int 		datasize;
-   short	channels;
-   int		samplerate;
-   short	samplesize;
+   int 	datasize;
+   unsigned short	channels;
+   unsigned int		samplerate;
+   unsigned short	samplesize;
    char* 	filename;
 }Wave;
 

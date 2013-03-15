@@ -56,7 +56,7 @@ int file_read(char* charbuffer, char* filename, int charmax){
 			//Open the file in the argument for reading. False means that the file will not be created
 			//if it is not found. A negative return value means that the file was not opened successfully
 			file0 = alt_up_sd_card_fopen(filename, false);
-
+			printf("\n%d\n", file0);
 			if (file0 == -1) return -1;
 			if (file0 == -2) return -2;
 

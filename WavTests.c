@@ -25,8 +25,8 @@ int main(void){
 	//Testing the building of the array of songs
 	else{
 	}
-	*wavArr = isWav("dingding.wav");
-	*(wavArr+1) = isWav("boing.wav");
+	*wavArr = isWav("test1.wav");
+	*(wavArr+1) = isWav("asd.wav");
 	printf("The information for the .wav is:\n");
 	printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",(*wavArr)->datasize, (*wavArr)->channels,
 			(*wavArr)->filename,(*wavArr)->samplerate, (*wavArr)->samplesize);
@@ -36,7 +36,15 @@ int main(void){
 	//Testing the .wav total retrieval
 	printf("The number of .wavs present on the sd card is: %d\n", getPlayable());
 
+	playSongNamed("test1.wav");
+	playSongNamed("test1.wav");
+	playSongNamed("test1.wav");
+	//playSongNamed("boing.wav");
+	//playSongNamed("test.wav");
+	//playSongNamed("dingding.wav");
+
 	//Testing song playback
+	/*
 	for(i=0; i<songCount; i++){
 		playSong(*(wavArr+i));
 		playSong(*(wavArr+i));
@@ -47,12 +55,14 @@ int main(void){
 		free(*(wavArr+i));
 	}
 	free(wavArr);
-
+	*/
+/*
 	//Testing song playback continued - filenames
 	printf("Now playing named\n");
 	if(playSongNamed("dingding.wav")!= 0){
 		printf("This failed horribly\n");
 	}
+	*/
 	return 0;
 }
 
