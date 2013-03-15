@@ -18,19 +18,20 @@
 /*
  * Initializes the audio output interface and creates an array to store pointers. Every pointer needs to be malloc'd
  * so that only as much memory as is needed to store the active songs is used. Returns a pointer to the array of songs
- * or a NULL pointer if the audio interface could not be initialized
+ * or a NULL pointer if the audio interface could not be initialized. This pointer should be freed when it is no longer used.
  */
 
-Wave* wavInit(void){
+Wave** wavInit(void){
 
-	Wave* Wavearr= malloc(SONGS_MAX*sizeof(Wave*));
+	Wave** wavArr = malloc(SONGS_MAX*sizeof(Wave*));
 	audio_dev = alt_up_audio_open_dev (AUDIO_NAME);
 	alt_up_audio_disable_read_interrupt(audio_dev);
 	alt_up_audio_enable_write_interrupt(audio_dev);
 	if ( audio_dev == NULL){
 		return NULL;
 	}
-	return Wavearr;
+	refreshSongs(wavArr);
+	return wavArr;
 }
 /*
  * Checks to see if the filename it takes exists and that it is a .wav file.
@@ -42,7 +43,6 @@ Wave* isWav(char* filename){
 	char fileheader[WAV_OFFSET];
 	char* fileheaderptr = &fileheader[0];
 	if(file_read(fileheaderptr, filename, WAV_OFFSET)<0){
-		printf("Could not find the specified file\n");
 		return NULL;
 	}
 	if((fileheader[8] == 'W') && fileheader[9] == 'A' && fileheader [10] == 'V' && fileheader[11] == 'E');
@@ -50,7 +50,6 @@ Wave* isWav(char* filename){
 		return NULL;
 	Wave* File = malloc(sizeof(Wave));
 	File->datasize = (unsigned char)fileheader[40]+(unsigned char)fileheader[41]*256+(unsigned char)fileheader[42]*65536;
-	printf("40 is %02hhX, 41 is %02hhX, 42 is %02hhX\n", fileheader[40], fileheader[41], fileheader[42]);
 	File->channels = fileheader[22];
 	File->samplerate = (unsigned char)fileheader[24]+(unsigned char)fileheader[25]*256+(unsigned char)fileheader[26]*65536;
 	File->samplesize = fileheader[34];
@@ -74,42 +73,61 @@ int getPlayable(void){
 	namearrptr = strtok(namearr, "wav");
 	if(namearrptr != NULL){
 		wavcnt++;
-		printf("One song added\n");
 	}
 	while(namearrptr != NULL){
-		printf("Another song added\n");
 		wavcnt++;
 		namearrptr = strtok(NULL, "wav");
 	}
 	return wavcnt;
 }
 /*
- * Plays the .wav file with the name specified in the argument. Returns a negative number if an error has occured and
- * 0 if the file has played
- * Best used with the [Wave]->filename operator
+ * Plays the .wav file using the data stored within the Wave* struct pointed to by the lone argument. If the pointer is null
+ * returns -1, otherwise plays the song and returns 0.
  */
 int playSong(Wave* Song){
-	if(Song == NULL){
-		return -1;
-	}
-	int songOffsetL = WAV_OFFSET;
-	int songOffsetR = WAV_OFFSET;
-	char* currentSong = malloc(Song->datasize+WAV_OFFSET);
-	file_read(currentSong+1, Song->filename, Song->datasize+WAV_OFFSET-1);
-	while(Song->datasize-songOffsetR > 0 && Song->datasize-songOffsetL > 0){
-		songOffsetR += 2*alt_up_audio_play_r(audio_dev, (unsigned int*)(currentSong+songOffsetR), Song->datasize-songOffsetR);
-		songOffsetL += 2*alt_up_audio_play_l(audio_dev, (unsigned int*)(currentSong+songOffsetL), Song->datasize-songOffsetL);
-	}
-	alt_up_audio_reset_audio_core(audio_dev);
-	free(currentSong);
 
+
+	unsigned char* currentSong = malloc((Song->datasize+WAV_OFFSET)*sizeof(char));
+	file_read((char*)(currentSong+1), Song->filename, Song->datasize+WAV_OFFSET-1);
+	short* temp2 = (short*)&currentSong[WAV_OFFSET];
+	unsigned short* temp = (unsigned short*)&currentSong[WAV_OFFSET];
+	int i;
+	printf("%d, %u\n", temp2[0], temp[0]);
+	for (i=0; i<(Song->datasize/2); i++){
+		temp[i]= temp2[i]+(32768);
+	}
+	printf("%d, %u\n", temp2[0], temp[0]);
+	unsigned int rightOffset = WAV_OFFSET;
+	unsigned int leftOffset = WAV_OFFSET;
+	while (rightOffset < Song->datasize && leftOffset < Song->datasize){
+		rightOffset += alt_up_audio_play_r(audio_dev,(unsigned int*)(&currentSong[rightOffset]),(Song->datasize-rightOffset));
+		leftOffset += alt_up_audio_play_l(audio_dev,(unsigned int*)(&currentSong[leftOffset]),(Song->datasize-leftOffset));
+	}
+	free(currentSong);
 	return 0;
+
 }
 
 /*
- * Purges the current list of playable songs and then proceeds to refresh the internal list of songs. Takes an pointer to the
- * array of pointers to structs of "Wave" and returns void.
+ * Plays the song specified in the argument or if the song is not valid, returns -1
  */
-void refreshSongs(char* Songarr){
+int playSongNamed(char* filename){
+	Wave* Song = isWav(filename);
+	if(Song == NULL){
+		return -1;
+	}
+	else{
+		playSong(Song);
+		free(Song);
+		return 0;
+	}
+
+}
+
+/*
+ * Purges the current list of playable songs and then proceeds to refresh the internal list of songs. Takes the pointer from
+ */
+void refreshSongs(Wave** Wavearr){
+	int i = getPlayable();
 
 }

@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <interface_SD.h>
+#include "interface_SD.h"
 #include <altera_up_sd_card_avalon_interface.h>
 
 
