@@ -22,7 +22,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="number"
-            android:text="128" />
+            android:text="000"
+            />
 
         <EditText
             android:id="@+id/ip2"
@@ -90,20 +91,6 @@
         android:orientation="horizontal" >
      
      </LinearLayout>
-	    
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="Message Received:" />
-
-    <EditText
-        android:id="@+id/RecvdMessage"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number" />
 
     <TextView
         android:layout_width="fill_parent"

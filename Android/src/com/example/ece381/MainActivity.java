@@ -1,13 +1,12 @@
 package com.example.ece381;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.view.View;
-import android.view.MotionEvent;
-import android.os.Handler;
 
 
 public class MainActivity extends Settings {
