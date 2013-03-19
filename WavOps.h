@@ -17,6 +17,7 @@
 #include "altera_up_avalon_audio_and_video_config.h"
 
 alt_up_audio_dev * audio_dev;
+alt_up_av_config_dev * av_config;
 
 Wave** wavInit(void);
 //Prototype for volume changer

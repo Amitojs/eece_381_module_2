@@ -25,20 +25,17 @@ int main(void){
 	//Testing the building of the array of songs
 	else{
 	}
-	*wavArr = isWav("test1.wav");
-	*(wavArr+1) = isWav("asd.wav");
+	*wavArr = isWav("seph.wav");
 	printf("The information for the .wav is:\n");
 	printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",(*wavArr)->datasize, (*wavArr)->channels,
 			(*wavArr)->filename,(*wavArr)->samplerate, (*wavArr)->samplesize);
-	printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",(*(wavArr+1))->datasize, (*(wavArr+1))->channels,
-			(*(wavArr+1))->filename,(*(wavArr+1))->samplerate, (*(wavArr+1))->samplesize);
 
 	//Testing the .wav total retrieval
 	printf("The number of .wavs present on the sd card is: %d\n", getPlayable());
 
-	playSongNamed("test1.wav");
-	playSongNamed("test1.wav");
-	playSongNamed("test1.wav");
+	playSongNamed("seph.wav");
+	playSongNamed("seph.wav");
+	playSongNamed("seph.wav");
 	//playSongNamed("boing.wav");
 	//playSongNamed("test.wav");
 	//playSongNamed("dingding.wav");

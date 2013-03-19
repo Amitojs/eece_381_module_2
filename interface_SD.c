@@ -28,6 +28,20 @@ void sd_init(void){
 	device_reference = alt_up_sd_card_open_dev(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
 }
 
+//returns a file handle that can be used using readFile
+short int openRead(char* filename){
+	if ((alt_up_sd_card_is_Present())) {
+			if (alt_up_sd_card_is_FAT16()) {
+				return alt_up_sd_card_fopen(filename, false);
+
+			}
+	}
+}
+
+//reads a short int of data back from the SD card. Is in no way safe.
+char readFile(short int filehandle){
+	return alt_up_sd_card_read(filehandle);
+}
 
 /*
  * This function is used for reading data to a buffer from the SD card. It takes in three arguments, a
@@ -56,7 +70,6 @@ int file_read(char* charbuffer, char* filename, int charmax){
 			//Open the file in the argument for reading. False means that the file will not be created
 			//if it is not found. A negative return value means that the file was not opened successfully
 			file0 = alt_up_sd_card_fopen(filename, false);
-			printf("\n%d\n", file0);
 			if (file0 == -1) return -1;
 			if (file0 == -2) return -2;
 

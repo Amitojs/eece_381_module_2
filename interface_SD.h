@@ -18,6 +18,10 @@
 void sd_init(void);
 //prototype for file reader.
 int file_read(char*, char*, int);
+//prototype for file opener
+short int openRead(char* filename);
+//prototype for file streamer
+char readFile(short int);
 //prototype for the file streamer.
 char filestream(char*, short int);
 //Prototype for the filename reader.
