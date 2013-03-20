@@ -38,19 +38,26 @@ void wavInit(void){
 }
 
 Wave** pianoInit(void){
-
+	printf("Initializing piano..");
 	Wave** pianoArr = malloc(PIANO_NOTES*sizeof(Wave*));
 	*pianoArr = isWav("c.wav");
 	*(pianoArr+1) = isWav("cs.wav");
+	printf(".");
 	*(pianoArr+2) = isWav("d.wav");
 	*(pianoArr+3) = isWav("ds.wav");
+	printf(".");
 	*(pianoArr+4) = isWav("e.wav");
 	*(pianoArr+5) = isWav("f.wav");
+	printf(".");
 	*(pianoArr+6) = isWav("fs.wav");
 	*(pianoArr+7) = isWav("g.wav");
-	*(pianoArr+8) = isWav("a.wav");
-	*(pianoArr+9) = isWav("as.wav");
-	*(pianoArr+10) = isWav("b.wav");
+	printf(".");
+	*(pianoArr+8) = isWav("gs.wav");
+	*(pianoArr+9) = isWav("a.wav");
+	printf(".");
+	*(pianoArr+10) = isWav("as.wav");
+	*(pianoArr+11) = isWav("b.wav");
+	printf("done!");
 
 	return pianoArr;
 
