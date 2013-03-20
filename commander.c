@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+Wave** pianoArr;
+
 
 // Completes an action from a command.
 // Returns true if successful, false if the action is unknown.
@@ -28,47 +30,51 @@ bool do_command( command* c ){
 		return false;
 	}else if ( c->action == 1 ){
 		switch ( c->my_note[0] ){
-			case 'A':
-				if (c->my_note[1] == 'S'){
-					playSongNamed( asfile );
-				}else{
-					playSongNamed( afile );
-				}break;
-			case 'B':
-				playSongNamed( bfile );
-				break;
-			case 'C':
-				if (c->my_note[1] == 'S'){
-					playSongNamed( csfile );
-				}else{
-					playSongNamed( cfile );
-				}break;
-			case 'D':
-				if (c->my_note[1] == 'S'){
-					playSongNamed( dsfile );
-				}else{
-					playSongNamed( dfile );
-				}break;
-			case 'E':
-				playSongNamed( efile );
-				break;
-			case 'F':
-				if (c->my_note[1] == 'S'){
-					playSongNamed( fsfile );
-				}else{
-					playSongNamed( ffile );
-				}break;
-			case 'G':
-				if (c->my_note[1] == 'S'){
-					playSongNamed( gsfile );
-				}else{
-					playSongNamed( gfile );
-				}break;
+		case 'A':
+			if (c->my_note[1] == 'S'){
+				playSong(*(pianoArr+10));
+			}else{
+				playSong(*(pianoArr+9));
+			}break;
+		case 'B':
+			playSong(*(pianoArr+11));
+			break;
+		case 'C':
+			if (c->my_note[1] == 'S'){
+				playSong(*(pianoArr+1));
+			}else{
+				playSong(*(pianoArr+0));
+			}break;
+		case 'D':
+			if (c->my_note[1] == 'S'){
+				playSong(*(pianoArr+3));
+			}else{
+				playSong(*(pianoArr+2));
+			}break;
+		case 'E':
+			playSong(*(pianoArr+4));
+			break;
+		case 'F':
+			if (c->my_note[1] == 'S'){
+				playSong(*(pianoArr+6));
+			}else{
+				playSong(*(pianoArr+5));
+			}break;
+		case 'G':
+			if (c->my_note[1] == 'S'){
+				playSong(*(pianoArr+8));
+			}else{
+				playSong(*(pianoArr+7));
+			}break;
 		}
 		return true;
 	}else if ( c->action == 2 ){
-		//Do action 2...
-		//return true;
+		if (c->my_note[0] == 'P'){
+			printf("Time to load piano stuff!\n");
+			pianoArr = pianoInit();
+			// rssend("Ok");
+			return true;
+		}
 	}
 	//No known action
 	return false;
@@ -104,12 +110,15 @@ command* consume_message( llist *head ){
 	if (message[0] == '1'){
 		c->my_note[0] = message[1];
 
-		if ( message[2] == 'S' )
+		if ( message[2] == '#' )
 			c->my_note[1] = 'S';
 		else
 			c->my_note[1] = '\0';
 
-	} else {// message[0] != '1';
+	}else if (message[0] == '2'){
+		c->my_note[0] = message[1];
+		c->my_note[1] = '\0';
+	}else{// message[0] != '1';
 		c->my_note[0] = '\0';
 		c->my_note[1] = '\0';
 	}
