@@ -71,7 +71,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -85,9 +85,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action A..."); 	// testing purposes!
                     sendkey("1A");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -105,7 +105,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -119,9 +119,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action A#..."); 	// testing purposes!
                     sendkey("1A#");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -139,7 +139,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -153,9 +153,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action B..."); 	// testing purposes!
                     sendkey("1B");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -173,7 +173,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -187,9 +187,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action C..."); 	// testing purposes!
                     sendkey("1C");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -207,7 +207,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -221,9 +221,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action C#..."); 	// testing purposes!
                     sendkey("1C#");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -241,7 +241,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -255,9 +255,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action D..."); 	// testing purposes!
                     sendkey("1D");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -275,7 +275,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -289,9 +289,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action D#..."); 	// testing purposes!
                     sendkey("1D#");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -309,7 +309,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -323,9 +323,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action E..."); 	// testing purposes!
                     sendkey("1E");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -343,7 +343,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -357,9 +357,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action F..."); 	// testing purposes!
                     sendkey("1F");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -377,7 +377,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -391,9 +391,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action F#..."); 	// testing purposes!
                     sendkey("1F#");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -411,7 +411,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -425,9 +425,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action G..."); 	// testing purposes!
                     sendkey("1G");
-                    handler.postDelayed(this, 500);
                 }
             };
 
@@ -445,7 +445,7 @@ public class Piano extends Settings {
                 	// user has pressed down the screen
                     if (handler != null) return true;
                     handler = new Handler();
-                    handler.postDelayed(mAction, 100);
+                    handler.postDelayed(mAction, 0);
                     break;
                 case MotionEvent.ACTION_UP:
                 	// user has pressed upwards on the screen
@@ -459,9 +459,9 @@ public class Piano extends Settings {
             Runnable mAction = new Runnable() {
             	// Runnable will keep running until the event has finished
                 @Override public void run() {
+                    handler.postDelayed(this, 500);
                     System.out.println("Performing action G#..."); 	// testing purposes!
                     sendkey("1G#");
-                    handler.postDelayed(this, 500);
                 }
             };
 

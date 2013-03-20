@@ -28,8 +28,9 @@ public final class R {
         public static final int white_glass=0x7f020004;
     }
     public static final class id {
+        public static final int RecvdMessage=0x7f090014;
         public static final int RelativeLayout1=0x7f090000;
-        public static final int action_settings=0x7f090015;
+        public static final int action_settings=0x7f090016;
         public static final int button1=0x7f090013;
         public static final int button_a=0x7f090001;
         public static final int button_asharp=0x7f09000c;
@@ -48,7 +49,7 @@ public final class R {
         public static final int ip2=0x7f09000e;
         public static final int ip3=0x7f09000f;
         public static final int ip4=0x7f090010;
-        public static final int menu_settings=0x7f090014;
+        public static final int menu_settings=0x7f090015;
         public static final int port=0x7f090011;
     }
     public static final class layout {

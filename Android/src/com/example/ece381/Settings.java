@@ -1,13 +1,17 @@
 package com.example.ece381;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -32,6 +36,14 @@ public class Settings extends Activity {
 		
 		//Method to initialize IP Addresses
 		LoadPreferences();
+		Button gotomenu = (Button) findViewById(R.id.button1);
+		gotomenu.setTextColor(Color.RED);
+		gotomenu.setText("Go To Menu");
+		
+		TCPReadTimerTask tcp_task = new TCPReadTimerTask();
+		Timer tcp_timer = new Timer();
+		tcp_timer.schedule(tcp_task, 3000, 500);
+
 	}
 
 	
@@ -50,6 +62,11 @@ public class Settings extends Activity {
 	    // (defined below).  This creates an instance of the subclass
 		// and executes the code in it.
 		new SocketConnect().execute((Void) null);
+		
+		if (app.sock != null && app.sock.isConnected()) {
+			msgbox.setText("Socket Opened");
+		}
+		
 	}
 
 	//  Called when the user wants to send a message
@@ -83,9 +100,11 @@ public class Settings extends Activity {
 	public void closeSocket(View view) {
 		MyApplication app = (MyApplication) getApplication();
 		Socket s = app.sock;
+		TextView msgbox = (TextView) findViewById(R.id.error_message_box);
 		try {
 			s.getOutputStream().close();
 			s.close();
+			msgbox.setText("Socket Closed");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -189,5 +208,51 @@ public class Settings extends Activity {
 		Intent openMainActivity = new Intent("com.example.ece381.MENU");
 		startActivity(openMainActivity);	
 	}
+	
+	public class TCPReadTimerTask extends TimerTask {
+		public void run() {
+			MyApplication app = (MyApplication) getApplication();
+			if (app.sock != null && app.sock.isConnected()
+					&& !app.sock.isClosed()) {
+				
+				try {
+					InputStream in = app.sock.getInputStream();
 
+					// See if any bytes are available from the Middleman
+					
+					int bytes_avail = in.available();
+					if (bytes_avail > 0) {
+						
+						// If so, read them in and create a sring
+						
+						byte buf[] = new byte[bytes_avail];
+						in.read(buf);
+
+						final String s = new String(buf, 0, bytes_avail, "US-ASCII");
+		
+						// As explained in the tutorials, the GUI can not be
+						// updated in an asyncrhonous task.  So, update the GUI
+						// using the UI thread.
+						
+						runOnUiThread(new Runnable() {
+							public void run() {
+								EditText et = (EditText) findViewById(R.id.RecvdMessage);
+								if(s.contentEquals("ready")){
+									et.setText("ready");
+								}else{
+									et.setText("Not Ready");
+								}
+								
+								
+							}
+						});
+						
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }
