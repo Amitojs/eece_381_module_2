@@ -26,7 +26,7 @@ public class Intro extends Activity {
 				}catch(InterruptedException e){
 					e.printStackTrace();
 				}finally{
-					Intent openMainActivity = new Intent("com.example.ece381.MENU");
+					Intent openMainActivity = new Intent("com.example.ece381.SETTINGS");
 					startActivity(openMainActivity);
 				}
 			};			

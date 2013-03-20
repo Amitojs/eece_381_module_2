@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ece381</string>
+    <string name="app_name">Instruments</string>
     <string name="label_ip">IP:</string>
     <string name="playsong">Play Song</string>
     <string name="label_port">Port:</string>

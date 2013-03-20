@@ -1,0 +1,127 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/button_a"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/button_b"
+        android:background="@drawable/white_glass"
+        android:minWidth="55dip" />
+
+    <Button
+        android:id="@+id/button_g"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/button_a"
+        android:background="@drawable/white_glass"        
+        android:minWidth="55dip" />
+
+    <Button
+        android:id="@+id/button_f"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/button_g"
+        android:background="@drawable/white_glass" 
+        android:minWidth="55dip" />
+
+    <Button
+        android:id="@+id/button_c"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/button_d"
+        android:background="@drawable/white_glass"
+        android:minWidth="55dip" />
+
+    <Button
+        android:id="@+id/button_e"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/button_f"
+        android:background="@drawable/white_glass" 
+        android:minWidth="55dip" />
+
+    <Button
+        android:id="@+id/button_d"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/button_e"
+        android:background="@drawable/white_glass" 
+        android:minWidth="55dip" />
+
+    <Button
+        android:id="@+id/button_b"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/white_glass" 
+        android:minWidth="55dip" />
+
+	<Button
+	    android:id="@+id/button_dsharp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_toLeftOf="@+id/button_e"
+	    android:background="@drawable/glass"
+	    android:minHeight="175dip"
+	    android:minWidth="35dip"
+	    android:paddingRight="10dip" />
+
+	<Button
+	    android:id="@+id/button_csharp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_toLeftOf="@+id/button_d"
+	    android:background="@drawable/glass"
+	    android:minHeight="175dip"
+	    android:minWidth="35dip"
+	    android:paddingLeft="5dip" />
+
+	<Button
+	    android:id="@+id/button_fsharp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_toLeftOf="@+id/button_g"
+	    android:background="@drawable/glass"
+	    android:minHeight="175dip"
+	    android:minWidth="35dip"
+	    android:paddingLeft="15dip" />
+
+	<Button
+	    android:id="@+id/button_gsharp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_toLeftOf="@+id/button_a"
+	    android:background="@drawable/glass"
+	    android:minHeight="175dip"
+	    android:minWidth="35dip"
+	    android:paddingLeft="10dip" />
+
+	<Button
+	    android:id="@+id/button_asharp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentTop="true"
+	    android:layout_toLeftOf="@+id/button_b"
+	    android:background="@drawable/glass"
+	    android:minHeight="175dip"
+	    android:minWidth="35dip"
+	    android:paddingRight="12dip" />
+
+</RelativeLayout>

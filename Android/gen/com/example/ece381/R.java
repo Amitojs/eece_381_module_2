@@ -30,6 +30,7 @@ public final class R {
     public static final class id {
         public static final int RelativeLayout1=0x7f090000;
         public static final int action_settings=0x7f090015;
+        public static final int button1=0x7f090013;
         public static final int button_a=0x7f090001;
         public static final int button_asharp=0x7f09000c;
         public static final int button_b=0x7f090002;
@@ -42,14 +43,13 @@ public final class R {
         public static final int button_fsharp=0x7f09000a;
         public static final int button_g=0x7f090003;
         public static final int button_gsharp=0x7f09000b;
-        public static final int error_message_box=0x7f090013;
-        public static final int ip1=0x7f09000e;
-        public static final int ip2=0x7f09000f;
-        public static final int ip3=0x7f090010;
-        public static final int ip4=0x7f090011;
+        public static final int error_message_box=0x7f090012;
+        public static final int ip1=0x7f09000d;
+        public static final int ip2=0x7f09000e;
+        public static final int ip3=0x7f09000f;
+        public static final int ip4=0x7f090010;
         public static final int menu_settings=0x7f090014;
-        public static final int port=0x7f090012;
-        public static final int textView1=0x7f09000d;
+        public static final int port=0x7f090011;
     }
     public static final class layout {
         public static final int activity_intro=0x7f030000;
@@ -60,7 +60,8 @@ public final class R {
         public static final int activity_main=0x7f080000;
         public static final int intro=0x7f080001;
         public static final int menu=0x7f080002;
-        public static final int settings=0x7f080003;
+        public static final int piano=0x7f080003;
+        public static final int settings=0x7f080004;
     }
     public static final class raw {
         public static final int supermario_theme=0x7f040000;
