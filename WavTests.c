@@ -11,31 +11,57 @@
 #include "FileStructs.h"
 #include "WavOps.h"
 #include "interface_SD.h"
+#include <altera_up_sd_card_avalon_interface.h>
 
 int main(void){
 
-	sd_init();
-	int songCount = getPlayable();
 	int i;
+	sd_init();
 	//Testing WavInit
-	Wave** wavArr = wavInit();
-	if(wavArr == NULL){
+	wavInit();
+
+	Wave** pianoArr = pianoInit();
+
+	if(pianoArr == NULL){
 		printf("The array was not built successfully, terminating");
 	}
-	//Testing the building of the array of songs
-	else{
+	for(i=0;i<PIANO_NOTES; i++){
+		printf("The information for the .wav is: \n");
+		printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",(*pianoArr+i)->datasize, (*pianoArr+i)->channels,
+				(*pianoArr+i)->filename,(*pianoArr+i)->samplerate, (*pianoArr+i)->samplesize);
 	}
-	*wavArr = isWav("seph.wav");
-	printf("The information for the .wav is:\n");
-	printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",(*wavArr)->datasize, (*wavArr)->channels,
-			(*wavArr)->filename,(*wavArr)->samplerate, (*wavArr)->samplesize);
-
 	//Testing the .wav total retrieval
-	printf("The number of .wavs present on the sd card is: %d\n", getPlayable());
-
-	playSongNamed("seph.wav");
-	playSongNamed("seph.wav");
-	playSongNamed("seph.wav");
+	printf("Total .wavs present on the sd card is: %d\n\n", getPlayable());
+	while(1){
+		for(i=0;i<PIANO_NOTES; i++){
+			playSong(*(pianoArr+i));
+		}
+	}
+	/*Testing the readspeed of the SD card
+	char* testbuffer = malloc (330000*sizeof(char));
+	short int test = openRead("seph.wav");
+	int i;
+	printf("Testing readspeed\n");
+		for(i=0;i<330000;i++)
+			testbuffer[i] = alt_up_sd_card_read(test);
+	printf("done\n");
+	free(testbuffer);
+	 */
+	while(1){
+		playSongNamed("seph.wav");
+		playSongNamed("c.wav");
+		playSongNamed("cs.wav");
+		playSongNamed("d.wav");
+		playSongNamed("ds.wav");
+		playSongNamed("e.wav");
+		playSongNamed("f.wav");
+		playSongNamed("fs.wav");
+		playSongNamed("g.wav");
+		playSongNamed("gs.wav");
+		playSongNamed("a.wav");
+		playSongNamed("as.wav");
+		playSongNamed("b.wav");
+	}
 	//playSongNamed("boing.wav");
 	//playSongNamed("test.wav");
 	//playSongNamed("dingding.wav");
@@ -52,14 +78,14 @@ int main(void){
 		free(*(wavArr+i));
 	}
 	free(wavArr);
-	*/
-/*
+	 */
+	/*
 	//Testing song playback continued - filenames
 	printf("Now playing named\n");
 	if(playSongNamed("dingding.wav")!= 0){
 		printf("This failed horribly\n");
 	}
-	*/
+	 */
 	return 0;
 }
 

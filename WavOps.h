@@ -9,6 +9,7 @@
 #define WAVOPS_H_
 
 #define SONGS_MAX 512
+#define PIANO_NOTES 11
 
 #include "FileStructs.h"
 #include <stdio.h>
@@ -19,7 +20,8 @@
 alt_up_audio_dev * audio_dev;
 alt_up_av_config_dev * av_config;
 
-Wave** wavInit(void);
+void wavInit(void);
+Wave** pianoInit(void);
 //Prototype for volume changer
 void volume(char);
 //Prototype for the wave format checker

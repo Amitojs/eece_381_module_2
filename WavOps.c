@@ -12,6 +12,7 @@
 #include <string.h>
 #include "FileStructs.h"
 #include <altera_up_avalon_audio.h>
+#include <altera_up_sd_card_avalon_interface.h>
 #include "altera_up_avalon_audio_and_video_config.h"
 #include "system.h"
 
@@ -23,23 +24,36 @@
  * If the function returns NULL something seriously wrong has occured.
  */
 
-Wave** wavInit(void){
-
-	Wave** wavArr = malloc(SONGS_MAX*sizeof(Wave*));
+void wavInit(void){
 	audio_dev = alt_up_audio_open_dev (AUDIO_NAME);
 	if ( audio_dev == NULL){
-		return NULL;
+		return;
 	}
 	av_config = alt_up_av_config_open_dev(AUDIO_AND_VIDEO_CONFIG_NAME);
 	while(!alt_up_av_config_read_ready(av_config));
 
 	alt_up_audio_disable_read_interrupt(audio_dev);
 	alt_up_audio_enable_write_interrupt(audio_dev);
-	if( audio_dev == NULL){
-		return NULL;
-	}
-	refreshSongs(wavArr);
-	return wavArr;
+	return;
+}
+
+Wave** pianoInit(void){
+
+	Wave** pianoArr = malloc(PIANO_NOTES*sizeof(Wave*));
+	*pianoArr = isWav("c.wav");
+	*(pianoArr+1) = isWav("cs.wav");
+	*(pianoArr+2) = isWav("d.wav");
+	*(pianoArr+3) = isWav("ds.wav");
+	*(pianoArr+4) = isWav("e.wav");
+	*(pianoArr+5) = isWav("f.wav");
+	*(pianoArr+6) = isWav("fs.wav");
+	*(pianoArr+7) = isWav("g.wav");
+	*(pianoArr+8) = isWav("a.wav");
+	*(pianoArr+9) = isWav("as.wav");
+	*(pianoArr+10) = isWav("b.wav");
+
+	return pianoArr;
+
 }
 
 /*
@@ -58,11 +72,16 @@ Wave* isWav(char* filename){
 	//else
 	//	return NULL;
 	Wave* File = malloc(sizeof(Wave));
+	if(File == NULL){
+	}
 	File->datasize = (unsigned char)fileheader[40]+(unsigned char)fileheader[41]*256+(unsigned char)fileheader[42]*65536;
 	File->channels = fileheader[22];
 	File->samplerate = (unsigned char)fileheader[24]+(unsigned char)fileheader[25]*256+(unsigned char)fileheader[26]*65536;
 	File->samplesize = fileheader[34];
 	File->filename = filename;
+	char* currentSong = malloc((File->datasize+WAV_OFFSET)*sizeof(char));
+	file_read(currentSong, File->filename, File->datasize+WAV_OFFSET);
+	File->songData = currentSong;
 	return File;
 }
 
@@ -94,12 +113,8 @@ int getPlayable(void){
  * returns -1, otherwise plays the song and returns 0.
  */
 int playSong(Wave* Song){
-
-	char* currentSong = malloc((Song->datasize)*sizeof(char));
-	file_read(currentSong, Song->filename, Song->datasize+WAV_OFFSET);
 	int i;
 	int k=0;
-	//get rid of the garbage
 
 	unsigned int buffer[16];
 	char* buffptr = (char*)&buffer[0];
@@ -107,21 +122,18 @@ int playSong(Wave* Song){
 	while(k < Song->datasize){
 		for(i=0;i<64;){
 			*(buffptr+i) = 0x00;
-			*(buffptr+i+1) = currentSong[k];
-			*(buffptr+i+2) = currentSong[k+1];
-			*(buffptr+i+3) = currentSong[k+2];
+			*(buffptr+i+1) = Song->songData[k];
+			*(buffptr+i+2) = Song->songData[k+1];
+			*(buffptr+i+3) = Song->songData[k+2];
 			i += 4;
 			k += 3;
 		}
 		//Forces the program to wait until the buffer has space
 		while(alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_LEFT)<16);
-			alt_up_audio_write_fifo(audio_dev, buffer, 16, ALT_UP_AUDIO_LEFT);
+		alt_up_audio_write_fifo(audio_dev, buffer, 16, ALT_UP_AUDIO_LEFT);
 		while(alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_RIGHT)<16);
-			alt_up_audio_write_fifo(audio_dev, buffer, 16, ALT_UP_AUDIO_RIGHT);
-
+		alt_up_audio_write_fifo(audio_dev, buffer, 16, ALT_UP_AUDIO_RIGHT);
 	}
-
-	free(currentSong);
 	return 0;
 
 }
@@ -136,6 +148,7 @@ int playSongNamed(char* filename){
 	}
 	else{
 		playSong(Song);
+		free(Song->songData);
 		free(Song);
 		return 0;
 	}
@@ -146,6 +159,5 @@ int playSongNamed(char* filename){
  * Purges the current list of playable songs and then proceeds to refresh the internal list of songs. Takes the pointer from
  */
 void refreshSongs(Wave** Wavearr){
-	int i = getPlayable();
 
 }
