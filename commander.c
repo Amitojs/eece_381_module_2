@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 1.3.1
+ *      Version: 1.4.1
  *
  *
  */
@@ -19,8 +19,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "RBheader.h"
 
 Wave** pianoArr;
+int green = 150;
 
 
 // Completes an action from a command.
@@ -28,53 +30,84 @@ Wave** pianoArr;
 bool do_command( command* c ){
 	if ( c->action == 0 ){
 		return false;
-	}else if ( c->action == 1 ){
+	}else if ( c->action == 1 && mystate == play){
 		switch ( c->my_note[0] ){
 		case 'A':
 			if (c->my_note[1] == 'S'){
 				playSong(*(pianoArr+10));
+				green = update_eq_sinc(95, green);
 			}else{
 				playSong(*(pianoArr+9));
+				green = update_eq_sinc(90, green);
 			}break;
 		case 'B':
 			playSong(*(pianoArr+11));
+			green = update_eq_sinc(100, green);
 			break;
 		case 'C':
 			if (c->my_note[1] == 'S'){
 				playSong(*(pianoArr+1));
+				green = update_eq_sinc(10, green);
 			}else{
 				playSong(*(pianoArr+0));
+				green = update_eq_sinc(0, green);
 			}break;
 		case 'D':
 			if (c->my_note[1] == 'S'){
 				playSong(*(pianoArr+3));
+				green = update_eq_sinc(30, green);
 			}else{
 				playSong(*(pianoArr+2));
+				green = update_eq_sinc(20, green);
 			}break;
 		case 'E':
 			playSong(*(pianoArr+4));
+			green = update_eq_sinc(40, green);
 			break;
 		case 'F':
 			if (c->my_note[1] == 'S'){
 				playSong(*(pianoArr+6));
+				green = update_eq_sinc(60, green);
 			}else{
 				playSong(*(pianoArr+5));
+				green = update_eq_sinc(50, green);
 			}break;
 		case 'G':
 			if (c->my_note[1] == 'S'){
 				playSong(*(pianoArr+8));
+				green = update_eq_sinc(80, green);
 			}else{
 				playSong(*(pianoArr+7));
+				green = update_eq_sinc(70, green);
 			}break;
 		}
 		return true;
+
+
 	}else if ( c->action == 2 ){
+		// Being told to set up an instrument
+		if (mystate != ready) return false;
+
 		if (c->my_note[0] == 'P'){
 			printf("Time to load piano stuff!\n");
 			pianoArr = pianoInit();
-			// rssend("Ok");
+			rssend("play");
+			mystate = play;
+			return true;
+
+		}else if (c->my_note[0] == 'D'){
+			printf("Time to load (drums) piano stuff!\n");
+			pianoArr = pianoInit();
+			rssend("play");
+			mystate = play;
 			return true;
 		}
+
+
+	}else if (c->action == 3){
+		// Being told to stahp
+		mystate = ready;
+		return true;
 	}
 	//No known action
 	return false;
@@ -88,13 +121,13 @@ command* consume_message( llist *head ){
 	int i = 0;
 	command* c = (command*)malloc(sizeof(command));
 
+	// If we have no message, send back a blank message
 	if ( head == NULL){
 		c->action = 0;
 		c->my_note[0] = '\0';
 		c->my_note[1] = '\0';
 		return c;
-	}
-	else {
+	}else {
 		//printf("\nConsuming message.\n");
 	}
 

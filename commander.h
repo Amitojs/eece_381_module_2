@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 1.3.1
+ *      Version: 1.4.1
  *
  *
  */
@@ -44,9 +44,6 @@ int main(){
 
 	return 0;
 }
-
-
-
  */
 
 
@@ -78,6 +75,9 @@ typedef struct command{
 	char my_note[2];
 } command;
 
+// State definitions --WIP
+typedef enum { setup, ready, play } state;
+state mystate;
 
 //--- Functions used by the command structure
 void		print_command	( command* c, bool nozero );
