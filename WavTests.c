@@ -13,13 +13,14 @@
 #include "interface_SD.h"
 #include <altera_up_sd_card_avalon_interface.h>
 
-int main(void){
+int main(){
 
+	printf("starting \n");
 	int i;
 	sd_init();
 	//Testing WavInit
 	wavInit();
-
+	/*
 	Wave** pianoArr = pianoInit();
 
 	if(pianoArr == NULL){
@@ -32,12 +33,22 @@ int main(void){
 	}
 	//Testing the .wav total retrieval
 	printf("Total .wavs present on the sd card is: %d\n\n", getPlayable());
-	while(1){
-		for(i=0;i<PIANO_NOTES; i++){
-			playSong(*(pianoArr+i));
-		}
+	playSong(pianoArr[0]);
+	while(numSongs > 0){
+		playArr();
+	}*/
+	Wave* Song = playSongNamed("c.wav");
+	//Wave* Song2= playSongNamed("a.wav");
+	while(numSongs > 0){
+		playArr();
 	}
-	/*Testing the readspeed of the SD card
+	free(Song->songData);
+	free(Song);
+	//free(Song2->songData);
+	//free(Song2);
+	printf("done");
+	//while(1){
+		/*Testing the readspeed of the SD card
 	char* testbuffer = malloc (330000*sizeof(char));
 	short int test = openRead("seph.wav");
 	int i;
@@ -46,22 +57,15 @@ int main(void){
 			testbuffer[i] = alt_up_sd_card_read(test);
 	printf("done\n");
 	free(testbuffer);
-	 */
-	while(1){
-		playSongNamed("seph.wav");
-		playSongNamed("c.wav");
-		playSongNamed("cs.wav");
-		playSongNamed("d.wav");
-		playSongNamed("ds.wav");
-		playSongNamed("e.wav");
-		playSongNamed("f.wav");
-		playSongNamed("fs.wav");
-		playSongNamed("g.wav");
-		playSongNamed("gs.wav");
-		playSongNamed("a.wav");
-		playSongNamed("as.wav");
-		playSongNamed("b.wav");
+	*/
+	/*
+		if(playStart == NULL){
+			playSong(pianoArr[0]);
+			printf("Should be playing\n");
+		}
+		playArr();
 	}
+	*/
 	//playSongNamed("boing.wav");
 	//playSongNamed("test.wav");
 	//playSongNamed("dingding.wav");

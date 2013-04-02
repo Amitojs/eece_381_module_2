@@ -10,15 +10,27 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define WAV_OFFSET 44
 
-typedef struct {
-   int 	datasize;
-   unsigned short	channels;
-   unsigned int		samplerate;
-   unsigned short	samplesize;
-   char* 	filename;
+typedef struct Wave{
+	char* filename;
+	int 	datasize;
+	unsigned short	channels;
+	unsigned int		samplerate;
+	unsigned short	samplesize;
+	char* songData;
+	bool loop;
 }Wave;
+
+typedef struct playingSong{
+
+	Wave* song;
+	int bytesPlayed;
+	bool finished;
+	struct playingSong* nextSong;
+
+}playingSong;
 
 #endif /* FILESTRUCTS_H_ */
