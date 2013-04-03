@@ -15,6 +15,7 @@
 #include <altera_up_sd_card_avalon_interface.h>
 #include "altera_up_avalon_audio_and_video_config.h"
 #include "system.h"
+#include <assert.h>
 
 
 /*
@@ -178,7 +179,7 @@ unsigned int playArr(void){
 
 	int k;
 	int j;
-	int buffer[24] = {0};
+	unsigned int buffer[24] = {0};
 
 
 	playingSong* pos = playStart;
@@ -209,9 +210,10 @@ unsigned int playArr(void){
 		//Add k bytes to the buffer for this song.
 		for(j=0;j<k/3;j++){
 			buffer[j] += /*(pos->song->songData[pos->bytesPlayed] & 0x80 ? 0xFF000000 : 0)
-					|*/	(pos->song->songData[pos->bytesPlayed]<<8)
+					|	*/(unsigned int)((pos->song->songData[pos->bytesPlayed+WAV_OFFSET]<<8)
 					|	(pos->song->songData[pos->bytesPlayed+1+WAV_OFFSET] << 16)
-					|	(pos->song->songData[pos->bytesPlayed+2+WAV_OFFSET] << 24);
+					|	(pos->song->songData[pos->bytesPlayed+2+WAV_OFFSET] << 24));
+
 			pos->bytesPlayed += 3;
 		}
 
@@ -232,7 +234,8 @@ unsigned int playArr(void){
 			buffer[j] = 0x00800000;
 		}
 		*/
-		buffer[j] = buffer[j] >> 8;
+		buffer[j] = (unsigned int)(buffer[j] >> 8);
+
 	}
 	//Play the buffer
 	while(alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_LEFT)<24);

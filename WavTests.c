@@ -39,11 +39,11 @@ int main(){
 	}*/
 	//Wave* Song2 = playSongNamed("seph.wav");
 	Wave* Song = playSongNamed("a.wav");
-	//Wave* Song2= playSongNamed("a.wav");
+	Wave* Song2= playSongNamed("c.wav");
 	while(1){
 		if(numSongs == 0){
 			playSong(Song);
-			//playSong(Song2);
+			playSong(Song2);
 		}
 
 		playArr();
