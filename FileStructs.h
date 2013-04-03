@@ -20,7 +20,7 @@ typedef struct Wave{
 	unsigned short	channels;
 	unsigned int		samplerate;
 	unsigned short	samplesize;
-	char* songData;
+	unsigned char* songData;
 	bool loop;
 }Wave;
 

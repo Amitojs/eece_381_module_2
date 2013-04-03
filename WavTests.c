@@ -37,9 +37,15 @@ int main(){
 	while(numSongs > 0){
 		playArr();
 	}*/
-	Wave* Song = playSongNamed("c.wav");
+	//Wave* Song2 = playSongNamed("seph.wav");
+	Wave* Song = playSongNamed("a.wav");
 	//Wave* Song2= playSongNamed("a.wav");
-	while(numSongs > 0){
+	while(1){
+		if(numSongs == 0){
+			playSong(Song);
+			//playSong(Song2);
+		}
+
 		playArr();
 	}
 	free(Song->songData);

@@ -93,7 +93,7 @@ Wave* isWav(char* filename){
 	File->samplerate = (unsigned char)fileheader[24]+(unsigned char)fileheader[25]*256+(unsigned char)fileheader[26]*65536;
 	File->samplesize = fileheader[34];
 	File->filename = filename;
-	char* currentSong = malloc((File->datasize+WAV_OFFSET)*sizeof(char));
+	unsigned char* currentSong = malloc((File->datasize+WAV_OFFSET)*sizeof(char));
 	file_read(currentSong, File->filename, File->datasize+WAV_OFFSET);
 	File->songData = currentSong;
 	return File;
@@ -144,7 +144,7 @@ int playSong(Wave* Song){
 			playStart->nextSong = NULL;
 
 		}
-		//Find the end of the linked list
+		//Find the end of the linked list and stick the song there
 		else{
 			playingSong* pos = playStart;
 			//As long as there is no subsequent element keep iterating
@@ -183,7 +183,7 @@ unsigned int playArr(void){
 
 	playingSong* pos = playStart;
 	//If the first song in the queue is finished, purge it, start at next song.
-	if(playStart->bytesPlayed == playStart->song->datasize){
+	if(playStart != NULL && playStart->bytesPlayed == playStart->song->datasize){
 		pos = playStart->nextSong;
 		free(playStart);
 		playStart = pos;
@@ -206,13 +206,12 @@ unsigned int playArr(void){
 		else{
 			k = pos->song->datasize-pos->bytesPlayed;
 		}
-
 		//Add k bytes to the buffer for this song.
 		for(j=0;j<k/3;j++){
-			buffer[j] += //((pos->song->songData[pos->bytesPlayed]) & 0x80) >0 ? 0 : 0xFF000000)
-						(pos->song->songData[pos->bytesPlayed] << 16)
-					| 	(pos->song->songData[pos->bytesPlayed+1] << 8)
-					|	(pos->song->songData[pos->bytesPlayed+2]);
+			buffer[j] += /*(pos->song->songData[pos->bytesPlayed] & 0x80 ? 0xFF000000 : 0)
+					|*/	(pos->song->songData[pos->bytesPlayed]<<8)
+					|	(pos->song->songData[pos->bytesPlayed+1+WAV_OFFSET] << 16)
+					|	(pos->song->songData[pos->bytesPlayed+2+WAV_OFFSET] << 24);
 			pos->bytesPlayed += 3;
 		}
 
@@ -222,8 +221,8 @@ unsigned int playArr(void){
 	}
 	//Play the buffer
 
-	for(j=0;j<24;j++){
-		/*
+	for(j=0;j<24;j++){/*
+
 		//If the buffer is greater than 24 bit limit -> 0x007FFFFF
 		if (buffer[j] > 0x007FFFFF){
 			buffer[j] = 0x7FFFFF;
@@ -233,7 +232,7 @@ unsigned int playArr(void){
 			buffer[j] = 0x00800000;
 		}
 		*/
-		buffer[j] = buffer[j] << 8;
+		buffer[j] = buffer[j] >> 8;
 	}
 	//Play the buffer
 	while(alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_LEFT)<24);
