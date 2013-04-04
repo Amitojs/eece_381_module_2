@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 3.1.1
+ *      Version: 3.3.0
  *
  *
  */
@@ -104,7 +104,7 @@ int main(){
 #define MY_HW_ONLY_TIMER_BASE 0x1000
 
 // Interval of timer checking in ms
-#define TIMER_INTERVAL 250
+#define TIMER_INTERVAL 100
 
 
 

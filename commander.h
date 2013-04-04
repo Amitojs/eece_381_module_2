@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 1.4.1
+ *      Version: 2.1.0
  *
  *
  */
@@ -78,6 +78,13 @@ typedef struct command{
 // State definitions --WIP
 typedef enum { setup, ready, play } state;
 state mystate;
+
+
+void load_piano ( void );
+void load_drums ( void );
+void play_in_parr(int n);
+void play_in_darr(int n);
+
 
 //--- Functions used by the command structure
 void		print_command	( command* c, bool nozero );

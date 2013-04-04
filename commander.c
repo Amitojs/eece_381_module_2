@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 1.4.1
+ *      Version: 2.1.0
  *
  *
  */
@@ -19,10 +19,16 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "RBheader.h"
+#include "VGA.h"
 
-Wave** pianoArr;
+//Wave** pianoArr;
 int green = 150;
+
+Wave* parr[12] = {0};
+Wave* darr[12] = {0};
+
+
+unsigned char play_message[] = "play";
 
 
 // Completes an action from a command.
@@ -34,79 +40,130 @@ bool do_command( command* c ){
 		switch ( c->my_note[0] ){
 		case 'A':
 			if (c->my_note[1] == 'S'){
-				playSong(*(pianoArr+10));
+				//playSong(*(pianoArr+10));
+				play_in_parr(10);
 				green = update_eq_sinc(95, green);
+				update_rb( 10 );
 			}else{
-				playSong(*(pianoArr+9));
+				//playSong(*(pianoArr+9));
+				play_in_parr(9);
 				green = update_eq_sinc(90, green);
+				update_rb( 9 );
 			}break;
 		case 'B':
-			playSong(*(pianoArr+11));
+			//playSong(*(pianoArr+11));
+			play_in_parr(11);
 			green = update_eq_sinc(100, green);
+			update_rb( 11 );
 			break;
 		case 'C':
 			if (c->my_note[1] == 'S'){
-				playSong(*(pianoArr+1));
+				//playSong(*(pianoArr+1));
+				play_in_parr(1);
 				green = update_eq_sinc(10, green);
+				update_rb( 1 );
 			}else{
-				playSong(*(pianoArr+0));
+				//playSong(*(pianoArr+0));
+				play_in_parr(0);
 				green = update_eq_sinc(0, green);
+				update_rb( 0 );
 			}break;
 		case 'D':
 			if (c->my_note[1] == 'S'){
-				playSong(*(pianoArr+3));
+				play_in_parr(3);
+				//playSong(*(pianoArr+3));
 				green = update_eq_sinc(30, green);
+				update_rb( 3 );
 			}else{
-				playSong(*(pianoArr+2));
+				//playSong(*(pianoArr+2));
+				play_in_parr(2);
 				green = update_eq_sinc(20, green);
+				update_rb( 2 );
 			}break;
 		case 'E':
-			playSong(*(pianoArr+4));
+			//playSong(*(pianoArr+4));
+			play_in_parr(4);
 			green = update_eq_sinc(40, green);
+			update_rb( 4 );
 			break;
 		case 'F':
 			if (c->my_note[1] == 'S'){
-				playSong(*(pianoArr+6));
+				play_in_parr(6);
+				//playSong(*(pianoArr+6));
 				green = update_eq_sinc(60, green);
+				update_rb( 6 );
 			}else{
-				playSong(*(pianoArr+5));
+				//playSong(*(pianoArr+5));
+				play_in_parr(5);
 				green = update_eq_sinc(50, green);
+				update_rb( 5 );
 			}break;
 		case 'G':
 			if (c->my_note[1] == 'S'){
-				playSong(*(pianoArr+8));
+				//playSong(*(pianoArr+8));
+				play_in_parr(8);
 				green = update_eq_sinc(80, green);
+				update_rb( 8 );
 			}else{
-				playSong(*(pianoArr+7));
+				//playSong(*(pianoArr+7));
+				play_in_parr(7);
 				green = update_eq_sinc(70, green);
+				update_rb( 7 );
 			}break;
+		case 's':
+			if (c->my_note[1] == 'd'){
+				play_in_darr(0);
+			} else {
+				play_in_darr(3);
+			}break;
+		case 'b':
+			play_in_darr(1);
+			break;
+		case 'l':
+			play_in_darr(2);
+			break;
+		case 'c':
+			//play_in_darr(4);
+			break;
+		case 'r':
+			//play_in_darr(5);
+			break;
 		}
 		return true;
 
 
 	}else if ( c->action == 2 ){
 		// Being told to set up an instrument
-		if (mystate != ready) return false;
-
+		//if (mystate != ready) return false;
+		//kill_timer();
 		if (c->my_note[0] == 'P'){
 			printf("Time to load piano stuff!\n");
-			pianoArr = pianoInit();
-			rssend("play");
+			//pianoArr = pianoInit();
+			load_piano();
+			rssend(play_message);
 			mystate = play;
 			return true;
 
 		}else if (c->my_note[0] == 'D'){
-			printf("Time to load (drums) piano stuff!\n");
-			pianoArr = pianoInit();
-			rssend("play");
+			printf("Time to load drum stuff!\n");
+			//pianoArr = pianoInit();
+			load_drums();
+			rssend(play_message);
 			mystate = play;
 			return true;
 		}
-
+		//setup_timer();
 
 	}else if (c->action == 3){
 		// Being told to stahp
 		mystate = ready;
+		return true;
+	}else if (c->action == 4){
+		//Going to play rockband
+		//if (!isfinished()){
+		init_rb(c->my_note[0] - '0', 1); //c->my_note[0]
+		changemode( notegame );
+		//}
 		return true;
 	}
 	//No known action
@@ -140,6 +197,7 @@ command* consume_message( llist *head ){
 
 	c->action = (int) message[0] - '0';
 
+	// One command and two arguments - Piano playing
 	if (message[0] == '1'){
 		c->my_note[0] = message[1];
 
@@ -148,9 +206,12 @@ command* consume_message( llist *head ){
 		else
 			c->my_note[1] = '\0';
 
-	}else if (message[0] == '2'){
+		// One command and one argument
+	}else if (message[0] == '2' || message[0] == '4'){
 		c->my_note[0] = message[1];
 		c->my_note[1] = '\0';
+
+		// No command known
 	}else{// message[0] != '1';
 		c->my_note[0] = '\0';
 		c->my_note[1] = '\0';
@@ -168,4 +229,73 @@ void print_command( command* c , bool nozero){
 		printf("\nAction: %d\n", c->action);
 		printf("Note: %s\n", c->my_note);
 	}
+}
+
+void play_in_parr(int n){
+	playSong(parr[n]);
+}
+
+
+void play_in_darr(int n){
+	playSong(darr[n]);
+}
+
+void load_drums( void ){
+	int i;
+	for (i=0;i<12;i++){
+		if (parr[i] == NULL || parr[i] == 0){
+
+		}else
+			free(parr[i]);
+	}
+	printf("Loading Drums into memory ");
+	darr[0] = isWav("s.wav");
+	printf(".");
+	darr[1] = isWav("k.wav");
+	printf(".");
+	darr[2] = isWav("bt.wav");
+	printf(".");
+	darr[3] = isWav("lt.wav");
+	printf(".");
+	//darr[4] = isWav("rc.wav");
+	//printf(".");
+	//darr[5] = isWav("rc.wav");
+	printf("Done\n");
+}
+
+
+void load_piano ( void ) {
+	int i;
+	for (i=0;i<12;i++){
+		if (darr[i] == NULL || darr[i] == 0){
+
+		} else
+			free(darr[i]);
+	}
+
+	printf("Loading Piano into memory ");
+	parr[0] = isWav("c.wav");
+	printf(".");
+	parr[1] = isWav("cs.wav");
+	printf(".");
+	parr[2] = isWav("d.wav");
+	printf(".");
+	parr[3] = isWav("ds.wav");
+	printf(".");
+	parr[4] = isWav("e.wav");
+	printf(".");
+	parr[5] = isWav("f.wav");
+	printf(".");
+	parr[6] = isWav("fs.wav");
+	printf(".");
+	parr[7] = isWav("g.wav");
+	printf(".");
+	parr[8] = isWav("gs.wav");
+	printf(".");
+	parr[9] = isWav("a.wav");
+	printf(".");
+	parr[10] = isWav("as.wav");
+	printf(".");
+	parr[11] = isWav("b.wav");
+	printf("Done\n");
 }

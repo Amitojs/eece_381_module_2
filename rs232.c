@@ -5,7 +5,7 @@
  *      Author: Scott
  *
  *
- *      Version: 3.1.1
+ *      Version: 3.3.0
  *
  *
  */
@@ -21,6 +21,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "WavOps.h"
+
+#define debug 0
+unsigned int lindex;
 
 //-----------------------------------
 llist *head = NULL;
@@ -129,12 +133,22 @@ void delete_head_from_list(){
 
 // This funciton will be called on every interval of TIMER_INTERVAL
 void timed_function(){
+	/*
+	playArr();
+	if (lindex%10){
+		lindex++;
+		return;
+	}
+	*/
+
 	if (alt_up_rs232_get_used_space_in_read_FIFO(a.uart) == 0){
 		//printf("\nNo message.\n");
 		return;
 	}
 	else {
+		#if debug
 		printf("\nGot a message: ");
+		#endif
 	}
 
 	unsigned char message[MAX_STRING_SIZE] = "";
@@ -279,7 +293,11 @@ void rsrecieve ( unsigned char* s1_ptr ) {
 		alt_up_rs232_read_data(a.uart, &a.data, &a.parity);
 
 		append(s1_ptr, a.data);
+		#if debug
 		printf("%c", a.data);
+		#endif
 	}
+	#if debug
 	printf("\n");
+	#endif
 }
