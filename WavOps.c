@@ -91,7 +91,7 @@ Wave* isWav(char* filename){
 	File->samplerate = (unsigned char)fileheader[24]+(unsigned char)fileheader[25]*256+(unsigned char)fileheader[26]*65536;
 	File->samplesize = fileheader[34];
 	File->filename = filename;
-	unsigned char* currentSong = malloc((File->datasize+WAV_OFFSET)*sizeof(char));
+	unsigned char* currentSong = malloc((File->datasize+WAV_OFFSET+1)*sizeof(char));
 	if(File==NULL){
 		printf("Couldn't allocate memory to note %s\n", filename);
 		return File;
