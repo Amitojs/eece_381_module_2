@@ -41,7 +41,7 @@ int getPlayable(void);
 //Prototypes for adding song to playback list
 int playSong(Wave* Song);
 //Prototype for playing the songs in the list
-unsigned int playArr(void);
+unsigned int playArr(void* context, alt_u32 id);
 //Prototype for explicit song playback
 Wave* playSongNamed(char* filename);
 //Prototype for refreshing SD card

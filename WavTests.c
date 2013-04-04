@@ -12,6 +12,7 @@
 #include "WavOps.h"
 #include "interface_SD.h"
 #include <altera_up_sd_card_avalon_interface.h>
+#include "commander.h"
 
 int main(){
 
@@ -20,41 +21,43 @@ int main(){
 	sd_init();
 	//Testing WavInit
 	wavInit();
-	/*
-	Wave** pianoArr = pianoInit();
 
-	if(pianoArr == NULL){
-		printf("The array was not built successfully, terminating");
-	}
-	for(i=0;i<PIANO_NOTES; i++){
-		printf("The information for the .wav is: \n");
-		printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",(*pianoArr+i)->datasize, (*pianoArr+i)->channels,
-				(*pianoArr+i)->filename,(*pianoArr+i)->samplerate, (*pianoArr+i)->samplesize);
-	}
-	//Testing the .wav total retrieval
-	printf("Total .wavs present on the sd card is: %d\n\n", getPlayable());
-	playSong(pianoArr[0]);
-	while(numSongs > 0){
-		playArr();
+
+	load_piano();
+	load_drums();
+
+	/*for(i=0;i<2; i++){
+		play_in_parr(i);
+		/*printf("The information for the .wav is: \n");
+		printf("datasize: %d\nchannels: %d\nfilename: %s\nsamplerate: %d\nsamplesize: %d\n",parr[i]->datasize, parr[i]->channels,
+				parr[i]->filename,parr[i]->samplerate, parr[i]->samplesize);
 	}*/
-	//Wave* Song2 = playSongNamed("seph.wav");
-	Wave* Song = playSongNamed("a.wav");
-	Wave* Song2= playSongNamed("c.wav");
-	while(1){
-		if(numSongs == 0){
-			playSong(Song);
-			playSong(Song2);
-		}
+	//Testing the .wav total retrieval
+	//printf("Total .wavs present on the sd card is: %d\n\n", getPlayable());
+	//playSong(parr[0]);
 
-		playArr();
+
+	while(1){
+		int i = 0;
+		play_in_parr(0);
+		while(i < 12){
+			if(numSongs == 0){
+				i++;
+				play_in_parr(i);
+			}
+		}
+		i=0;
+		play_in_darr(0);
+		while(i < 6){
+			if(numSongs == 0){
+				i++;
+				play_in_darr(i);
+			}
+		}
 	}
-	free(Song->songData);
-	free(Song);
-	//free(Song2->songData);
-	//free(Song2);
 	printf("done");
 	//while(1){
-		/*Testing the readspeed of the SD card
+	/*Testing the readspeed of the SD card
 	char* testbuffer = malloc (330000*sizeof(char));
 	short int test = openRead("seph.wav");
 	int i;
@@ -63,7 +66,7 @@ int main(){
 			testbuffer[i] = alt_up_sd_card_read(test);
 	printf("done\n");
 	free(testbuffer);
-	*/
+	 */
 	/*
 		if(playStart == NULL){
 			playSong(pianoArr[0]);
@@ -71,7 +74,7 @@ int main(){
 		}
 		playArr();
 	}
-	*/
+	 */
 	//playSongNamed("boing.wav");
 	//playSongNamed("test.wav");
 	//playSongNamed("dingding.wav");

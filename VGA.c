@@ -49,7 +49,7 @@ void vga_init()
 
 void RB_init(){
 	m = blank;
-	alt_timestamp_start();
+	//alt_timestamp_start();
 }
 
 void init_rb(int song, int difficulty)
@@ -282,7 +282,7 @@ void init_rb(int song, int difficulty)
 	rb.score = 0;
 	rb.time = 0.0;
 	rb.finished = FALSE;
-	alt_timestamp_start();
+	//alt_timestamp_start();
 	printf("Exiting init_rb\n");
 }
 
@@ -312,27 +312,27 @@ void update_rb(int note_pressed)
 
 			/*
 			// Draw blue background and correct zone to back buffer
-			playArr();
+
 			bluebackground(v.pixel_buffer);
-			playArr();
+
 			alt_up_pixel_buffer_dma_draw_hline(v.pixel_buffer, 0, 319, 220-4*rb.CORRECT_ZONE_HEIGHT, 0x0000, 1); // Top of the correct zone
-			playArr();
+
 			alt_up_pixel_buffer_dma_draw_box(v.pixel_buffer, 0, 221-4*rb.CORRECT_ZONE_HEIGHT, 319, 219, 0xCCCC, 1);
-			playArr();
+
 			alt_up_pixel_buffer_dma_draw_hline(v.pixel_buffer, 0, 319, 220, 0x0000, 1); // Bottom of the correct zone
-			playArr();
+
 
 
 			// Swap buffers
 			alt_up_pixel_buffer_dma_swap_buffers(v.pixel_buffer);
-			playArr();
+
 			while (alt_up_pixel_buffer_dma_check_swap_buffers_status(v.pixel_buffer));
-			playArr();
+
 			*/
 
 			// Draw blue background and correct zone to back buffer
 			bluebackground(v.pixel_buffer);
-			playArr();
+
 			draw_correct_zone(v.pixel_buffer, rb.CORRECT_ZONE_HEIGHT);
 
 			// Clear char buffer
@@ -344,9 +344,9 @@ void update_rb(int note_pressed)
 		// alt_up_char_buffer_clear(v.char_buffer);
 
 		for(j=0; j<12; j++) rb.in_correct_zone[j] = FALSE; // Reset all entries at each update
-		playArr();
 
-		rb.time = alt_timestamp() / (float) alt_timestamp_freq();
+
+		//rb.time = alt_timestamp() / (float) alt_timestamp_freq();
 		// Time represents the amount of time passed since the game started, in seconds
 
 		rb.count = rb.time / rb.RB_TIME_CONSTANT_S;
@@ -370,7 +370,7 @@ void update_rb(int note_pressed)
 
 		rb.bottom_index = -1; // Initialise. This will be changed at some point in the for loop below, or after the for loop
 
-		playArr();
+
 
 		for(i=0; i<rb.index; i++)
 		{
@@ -382,9 +382,9 @@ void update_rb(int note_pressed)
 			{
 				// alt_up_char_buffer_string(v.char_buffer, rb.notes_char[i], rb.x_locations[i], rb.y_locations[i]); // Print the pitch at its corresponding location
 				// eraser_rb(v.pixel_buffer, rb.y_locations[i] - rb.count_difference - 1, rb.x_locations[i], rb.CORRECT_ZONE_HEIGHT); // Erase the old note
-				playArr();
+
 				draw_rb_note_at(v.pixel_buffer, rb.y_locations[i], rb.x_locations[i]); // Draw new note
-				playArr();
+
 				if(rb.y_locations[i] >= 56 - rb.CORRECT_ZONE_HEIGHT && rb.y_locations[i] <= 55) // Check if the location is within the correct range
 				{
 					rb.in_correct_zone[rb.notes[i]] = TRUE; // Record that the pitch of note i is in the correct zone
@@ -398,7 +398,7 @@ void update_rb(int note_pressed)
 								rb.already_counted[i] = TRUE;
 							}
 							draw_rb_correct_note_at(v.pixel_buffer, rb.y_locations[i], rb.x_locations[i]);
-							playArr();
+
 						}
 					}
 				}
@@ -408,7 +408,7 @@ void update_rb(int note_pressed)
 		if(rb.bottom_index == -1) // This means there was no note within the correct zone
 		{
 			while(rb.y_locations[i] < 56 - rb.CORRECT_ZONE_HEIGHT) i--;
-			playArr();
+
 			rb.bottom_index = i+1; // Set bottom_index to the index of the note closest to, and on top of, the correct zone
 		}
 		if(note_pressed >= 0) // Check if there has been a note pressed
@@ -429,9 +429,9 @@ void update_rb(int note_pressed)
 
 		// Swap buffers
 		alt_up_pixel_buffer_dma_swap_buffers(v.pixel_buffer);
-		playArr();
+
 		while (alt_up_pixel_buffer_dma_check_swap_buffers_status(v.pixel_buffer));
-		playArr();
+
 
 		// Draw blue background and correct zone to back buffer
 		/*
@@ -646,15 +646,15 @@ void draw_correct_zone(alt_up_pixel_buffer_dma_dev* pixel_buffer, int CORRECT_ZO
 {
 	int i;
 	alt_up_pixel_buffer_dma_draw_hline(pixel_buffer, 0, 319, 220-4*CORRECT_ZONE_HEIGHT, 0x0000, 1); // Top of the correct zone
-	playArr();
+
 
 	for(i=0; i<320; i++)
 	{
 		alt_up_pixel_buffer_dma_draw_vline(pixel_buffer, i, 221-4*CORRECT_ZONE_HEIGHT, 219, 0xCCCC, 1);
-		playArr();
+
 	}
 	alt_up_pixel_buffer_dma_draw_hline(pixel_buffer, 0, 319, 220, 0x0000, 1); // Bottom of the correct zone
-	playArr();
+
 }
 
 void eraser_rb(alt_up_pixel_buffer_dma_dev* pixel_buffer, int location, int x_location, int CORRECT_ZONE_HEIGHT)
@@ -667,11 +667,11 @@ void eraser_rb(alt_up_pixel_buffer_dma_dev* pixel_buffer, int location, int x_lo
 #if 1
 		// Draw double thickness square in blue background colour
 		alt_up_pixel_buffer_dma_draw_rectangle(pixel_buffer, x_location*4 - 9, location*4 - 12, x_location*4 + 11, location*4 + 8,0x122B, 1);
-		playArr();
+
 		alt_up_pixel_buffer_dma_draw_rectangle(pixel_buffer, x_location*4 - 8, location*4 - 11,  x_location*4 + 10, location*4 + 7,0x122B, 1);
-		playArr();
+
 		alt_up_pixel_buffer_dma_draw_box(pixel_buffer, x_location*4 - 9, location*4 - 16,  x_location*4 + 11, location*4 - 13,0x122B, 1);
-		playArr();
+
 #endif
 
 #if 0
@@ -683,11 +683,11 @@ void eraser_rb(alt_up_pixel_buffer_dma_dev* pixel_buffer, int location, int x_lo
 #if 1
 		// Draw double thickness square in blue background colour
 		alt_up_pixel_buffer_dma_draw_rectangle(pixel_buffer, x_location*4 - 9, location*4 - 12, x_location*4 + 11, location*4 + 8,0x122B, 1);
-		playArr();
+
 		alt_up_pixel_buffer_dma_draw_rectangle(pixel_buffer, x_location*4 - 8, location*4 - 11,  x_location*4 + 10, location*4 + 7,0x122B, 1);
-		playArr();
+
 		alt_up_pixel_buffer_dma_draw_box(pixel_buffer, x_location*4 - 9, location*4 - 16,  x_location*4 + 11, location*4 - 13,0x122B, 1);
-		playArr();
+
 #endif
 
 #if 0
@@ -695,11 +695,11 @@ void eraser_rb(alt_up_pixel_buffer_dma_dev* pixel_buffer, int location, int x_lo
 #endif
 
 		alt_up_pixel_buffer_dma_draw_hline(pixel_buffer, x_location*4 - 9, x_location*4 + 11, 220-4*CORRECT_ZONE_HEIGHT, 0x0000, 1); // Top of the correct zone
-		playArr();
+
 		alt_up_pixel_buffer_dma_draw_box(pixel_buffer, x_location*4 - 9, 221-4*CORRECT_ZONE_HEIGHT,  x_location*4 + 11, 219, 0xCCCC, 1); // Correct zone
-		playArr();
+
 		alt_up_pixel_buffer_dma_draw_hline(pixel_buffer, x_location*4 - 9, x_location*4 + 11, 220, 0x0000, 1); // Bottom of the correct zone
-		playArr();
+
 	}
 }
 
@@ -711,9 +711,9 @@ void draw_rb_note_at(alt_up_pixel_buffer_dma_dev* pixel_buffer, int location, in
 {
 	// Draw double thickness square in black
 	alt_up_pixel_buffer_dma_draw_rectangle(pixel_buffer, x_location*4 - 9, location*4 - 12, x_location*4 + 11, location*4 + 8,0x0000, 1);
-	playArr();
+
 	alt_up_pixel_buffer_dma_draw_rectangle(pixel_buffer, x_location*4 - 8, location*4 - 11,  x_location*4 + 10, location*4 + 7,0x0000, 1);
-	playArr();
+
 }
 
 void draw_rb_correct_note_at(alt_up_pixel_buffer_dma_dev* pixel_buffer, int location, int x_location)
@@ -731,7 +731,7 @@ void draw_rb_correct_note_at(alt_up_pixel_buffer_dma_dev* pixel_buffer, int loca
 	// Fill the inside in green
 	uint16_t fill_colour = drawRGB24toRGB565(0, 114, 54); // Dark green
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, x_location*4 - 7, location*4 - 10,  x_location*4 + 9, location*4 + 6, fill_colour, 1);
-	playArr();
+
 }
 
 void draw_rb_incorrect_note_at(alt_up_pixel_buffer_dma_dev* pixel_buffer, int location, int x_location)
@@ -749,7 +749,7 @@ void draw_rb_incorrect_note_at(alt_up_pixel_buffer_dma_dev* pixel_buffer, int lo
 	// Fill the inside in green
 	uint16_t fill_colour = drawRGB24toRGB565(0x66, 0x33, 0x00); // Brown cave colour
 	alt_up_pixel_buffer_dma_draw_box(pixel_buffer, x_location*4 - 7, location*4 - 10,  x_location*4 + 9, location*4 + 6, fill_colour, 1);
-	playArr();
+
 }
 
 _Bool is_rb_finished()
@@ -801,7 +801,7 @@ void bluebackground(alt_up_pixel_buffer_dma_dev* pixel_buffer)
 	for(i=0; i<320; i++)
 	{
 		alt_up_pixel_buffer_dma_draw_vline(pixel_buffer, i, 0, 239, 0x122B, 1);
-		playArr();
+
 	}
 	// alt_up_pixel_buffer_dma_draw_box(pixel_buffer, 0, 0, 319, 239, 0x122B, 1);
 	return;
@@ -810,9 +810,9 @@ void bluebackground(alt_up_pixel_buffer_dma_dev* pixel_buffer)
 int check_switches()
 // FUNCTION: Reads the value of all switches
 // RETURNS: Value of all switches
-{
-	playArr();
-	return IORD_8DIRECT(SWITCHES_BASE, 0);
+{/*
+
+	return IORD_8DIRECT(SWITCHES_0_BASE, 0);*/
 }
 
 alt_up_pixel_buffer_dma_dev * initialise_pixel()

@@ -16,7 +16,7 @@
 #include "altera_up_avalon_audio_and_video_config.h"
 #include "system.h"
 #include <assert.h>
-
+#include "sys/alt_irq.h"
 
 /*
  * Initializes the audio output interface and audio configuration.
@@ -35,6 +35,7 @@ void wavInit(void){
 
 	alt_up_audio_disable_read_interrupt(audio_dev);
 	alt_up_audio_enable_write_interrupt(audio_dev);
+	alt_irq_register(AUDIO_IRQ, AUDIO_IRQ_INTERRUPT_CONTROLLER_ID, playArr);
 	playStart = NULL;
 	numSongs = 0;
 	return;
@@ -63,10 +64,6 @@ Wave** pianoInit(void){
 	*(pianoArr+10) = isWav("as.wav");
 	*(pianoArr+11) = isWav("b.wav");
 	printf("done!");
-	int i;
-	for(i=0; i<12; i++){
-		pianoArr[i]->loop = true;
-	}
 
 	return pianoArr;
 
@@ -79,7 +76,7 @@ Wave** pianoInit(void){
  * The returned filedata and file must be deallocated with free.
  */
 Wave* isWav(char* filename){
-	char fileheader[WAV_OFFSET];
+	char fileheader[WAV_OFFSET+1];
 	char* fileheaderptr = &fileheader[0];
 	if(file_read(fileheaderptr, filename, WAV_OFFSET)<0){
 		return NULL;
@@ -95,6 +92,10 @@ Wave* isWav(char* filename){
 	File->samplesize = fileheader[34];
 	File->filename = filename;
 	unsigned char* currentSong = malloc((File->datasize+WAV_OFFSET)*sizeof(char));
+	if(File==NULL){
+		printf("Couldn't allocate memory to note %s\n", filename);
+		return File;
+	}
 	file_read(currentSong, File->filename, File->datasize+WAV_OFFSET);
 	File->songData = currentSong;
 	return File;
@@ -133,6 +134,8 @@ int getPlayable(void){
  */
 int playSong(Wave* Song){
 	//Add the song to the play queue if there's enough room - Enforced for quality and CPU power reasons.
+
+
 	if (numSongs < PLAY_LIMIT){
 
 		//If there are no elements currently playing, initialize
@@ -141,7 +144,6 @@ int playSong(Wave* Song){
 			playStart = malloc(sizeof(playingSong));
 			playStart->song = Song;
 			playStart->bytesPlayed = 0;
-			playStart->finished = false;
 			playStart->nextSong = NULL;
 
 		}
@@ -156,7 +158,6 @@ int playSong(Wave* Song){
 			pos = pos->nextSong;
 			pos->song = Song;
 			pos->bytesPlayed = 0;
-			pos->finished = false;
 			pos->nextSong = NULL;
 
 		}
@@ -175,7 +176,7 @@ int playSong(Wave* Song){
  * If the song has been defined as looping, will continuously play the song up to a limit.
  * Takes no arguments and returns the amplitude of the first value in the buffer which may be used for the equalizer
  */
-unsigned int playArr(void){
+unsigned int playArr(void* context, alt_u32 id){
 
 	int k;
 	int j;
@@ -194,7 +195,7 @@ unsigned int playArr(void){
 	while(pos!= NULL){
 		//If the next element has no bytes left to play, remove it from the playing queue.
 		//and set the nextSong parameter accordingly
-		if(pos->nextSong != NULL && pos->bytesPlayed == pos->song->datasize){
+		if(pos->nextSong != NULL && pos->nextSong->bytesPlayed == pos->nextSong->song->datasize){
 			playingSong* temp = pos->nextSong;
 			pos->nextSong = pos->nextSong->nextSong;
 			free(temp);
