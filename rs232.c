@@ -150,6 +150,7 @@ void timed_function(){
 		printf("\nGot a message: ");
 		#endif
 	}
+
 	unsigned char message[MAX_STRING_SIZE] = "";
 	unsigned char* message_ptr = message;
 

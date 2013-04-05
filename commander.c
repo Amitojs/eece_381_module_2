@@ -133,15 +133,13 @@ bool do_command( command* c ){
 
 
 	}else if ( c->action == 2 ){
-
-		printf("here!");
 		// Being told to set up an instrument
 		//if (mystate != ready) return false;
 		//kill_timer();
 		if (c->my_note[0] == 'P'){
 			printf("Time to load piano stuff!\n");
 			//pianoArr = pianoInit();
-			//load_piano();
+			load_piano();
 			rssend(play_message);
 			mystate = play;
 			return true;
@@ -149,7 +147,7 @@ bool do_command( command* c ){
 		}else if (c->my_note[0] == 'D'){
 			printf("Time to load drum stuff!\n");
 			//pianoArr = pianoInit();
-			//load_drums();
+			load_drums();
 			rssend(play_message);
 			mystate = play;
 			return true;
@@ -245,10 +243,10 @@ void play_in_darr(int n){
 void load_drums( void ){
 	int i;
 	for (i=0;i<12;i++){
-		if (darr[i] == NULL || darr[i] == 0){
+		if (parr[i] == NULL || parr[i] == 0){
 
 		}else
-			free(darr[i]);
+			free(parr[i]);
 	}
 	printf("Loading Drums into memory ");
 	darr[0] = isWav("s.wav");
@@ -259,9 +257,9 @@ void load_drums( void ){
 	printf(".");
 	darr[3] = isWav("lt.wav");
 	printf(".");
-	darr[4] = isWav("cc.wav");
-	printf(".");
-	darr[5] = isWav("rc.wav");
+	//darr[4] = isWav("rc.wav");
+	//printf(".");
+	//darr[5] = isWav("rc.wav");
 	printf("Done\n");
 }
 
@@ -269,10 +267,10 @@ void load_drums( void ){
 void load_piano ( void ) {
 	int i;
 	for (i=0;i<12;i++){
-		if (parr[i] == NULL || parr[i] == 0){
+		if (darr[i] == NULL || darr[i] == 0){
 
 		} else
-			free(parr[i]);
+			free(darr[i]);
 	}
 
 	printf("Loading Piano into memory ");

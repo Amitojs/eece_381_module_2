@@ -21,6 +21,7 @@
 /*
  * Initializes the audio output interface and audio configuration.
  * Does not return a value.
+ *
  */
 
 
@@ -134,7 +135,7 @@ int getPlayable(void){
 int playSong(Wave* Song){
 	//Add the song to the play queue if there's enough room - Enforced for quality and CPU power reasons.
 
-	alt_irq_disable(AUDIO_IRQ);
+
 	if (numSongs < PLAY_LIMIT){
 
 		//If there are no elements currently playing, initialize
@@ -161,11 +162,9 @@ int playSong(Wave* Song){
 
 		}
 		numSongs++;
-		alt_irq_enable(AUDIO_IRQ);
 		return 0;
 	}
 	//Notify the caller that there wasn't enough room to play the note
-	alt_irq_enable(AUDIO_IRQ);
 	return -1;
 
 
@@ -177,7 +176,7 @@ int playSong(Wave* Song){
  * If the song has been defined as looping, will continuously play the song up to a limit.
  * Takes no arguments and returns the amplitude of the first value in the buffer which may be used for the equalizer
  */
-void playArr(void* context, alt_u32 id){
+unsigned int playArr(void* context, alt_u32 id){
 
 	int k;
 	int j;
@@ -212,7 +211,7 @@ void playArr(void* context, alt_u32 id){
 		//Add k bytes to the buffer for this song.
 		for(j=0;j<k/3;j++){
 			buffer[j] += /*(pos->song->songData[pos->bytesPlayed] & 0x80 ? 0xFF000000 : 0)
-					|	*/((pos->song->songData[pos->bytesPlayed+WAV_OFFSET]<<8)
+					|	*/(unsigned int)((pos->song->songData[pos->bytesPlayed+WAV_OFFSET]<<8)
 					|	(pos->song->songData[pos->bytesPlayed+1+WAV_OFFSET] << 16)
 					|	(pos->song->songData[pos->bytesPlayed+2+WAV_OFFSET] << 24));
 
@@ -240,12 +239,10 @@ void playArr(void* context, alt_u32 id){
 
 	}
 	//Play the buffer
-	while(alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_LEFT) < 24);
 	alt_up_audio_write_fifo(audio_dev, (unsigned int*)buffer, 24, ALT_UP_AUDIO_LEFT);
-	while(alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_RIGHT)<24);
 	alt_up_audio_write_fifo(audio_dev, (unsigned int*)buffer, 24, ALT_UP_AUDIO_RIGHT);
 
-	return;
+	return buffer[0];
 
 }
 //If there is insufficient space return -1

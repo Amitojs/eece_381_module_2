@@ -14,7 +14,7 @@
 
 #define SONGS_MAX 512
 #define PIANO_NOTES 12
-#define PLAY_LIMIT 4
+#define PLAY_LIMIT 12
 #define LOOP_LIMIT 8000
 
 #include "FileStructs.h"
@@ -41,7 +41,7 @@ int getPlayable(void);
 //Prototypes for adding song to playback list
 int playSong(Wave* Song);
 //Prototype for playing the songs in the list
-void playArr(void* context, alt_u32 id);
+unsigned int playArr(void* context, alt_u32 id);
 //Prototype for explicit song playback
 Wave* playSongNamed(char* filename);
 //Prototype for refreshing SD card

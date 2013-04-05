@@ -48,9 +48,8 @@ int main(){
 
 	mystate = ready;
 
-	load_drums();
-	load_piano();
-	//pianoArr = pianoInit();
+	//load_piano();
+	//load_drums();
 
 	for(;;){
 		if (i%100 == 0 ){
