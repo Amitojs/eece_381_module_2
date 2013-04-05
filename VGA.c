@@ -810,9 +810,9 @@ void bluebackground(alt_up_pixel_buffer_dma_dev* pixel_buffer)
 int check_switches()
 // FUNCTION: Reads the value of all switches
 // RETURNS: Value of all switches
-{/*
+{
 
-	return IORD_8DIRECT(SWITCHES_0_BASE, 0);*/
+	return IORD_8DIRECT(SWITCHES_BASE, 0);
 }
 
 alt_up_pixel_buffer_dma_dev * initialise_pixel()

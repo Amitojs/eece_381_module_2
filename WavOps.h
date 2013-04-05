@@ -14,7 +14,7 @@
 
 #define SONGS_MAX 512
 #define PIANO_NOTES 12
-#define PLAY_LIMIT 2
+#define PLAY_LIMIT 4
 #define LOOP_LIMIT 8000
 
 #include "FileStructs.h"

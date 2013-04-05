@@ -133,6 +133,8 @@ bool do_command( command* c ){
 
 
 	}else if ( c->action == 2 ){
+
+		printf("here!");
 		// Being told to set up an instrument
 		//if (mystate != ready) return false;
 		//kill_timer();

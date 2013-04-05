@@ -21,7 +21,6 @@
 #include "sys/alt_alarm.h"
 #include <math.h>
 #include <stdint.h>
-#include <altera_up_avalon_character_lcd.h>
 #include <altera_up_sd_card_avalon_interface.h>
 #include <io.h>
 

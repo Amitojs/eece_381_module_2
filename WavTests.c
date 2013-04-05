@@ -23,10 +23,10 @@ int main(){
 	//Testing WavInit
 	wavInit();
 
-
+	/*
 	load_piano();
 	load_drums();
-
+	*/
 	/*for(i=0;i<2; i++){
 		play_in_parr(i);
 		/*printf("The information for the .wav is: \n");
@@ -36,8 +36,17 @@ int main(){
 	//Testing the .wav total retrieval
 	//printf("Total .wavs present on the sd card is: %d\n\n", getPlayable());
 	//playSong(parr[0]);
+	Wave* Song1 = isWav("seph.wav");
+	Wave* Song2 = isWav("c.wav");
+	while(1){
+		printf("numsongs is: %d\n",numSongs);
+		if(numSongs == 0){
+			playSong(Song1);
+			playSong(Song2);
+		}
+	}
 
-
+	/*
 	while(1){
 		int i = 0;
 		play_in_parr(0);
@@ -57,6 +66,7 @@ int main(){
 		}
 	}
 	printf("done");
+	*/
 	//while(1){
 	/*Testing the readspeed of the SD card
 	char* testbuffer = malloc (330000*sizeof(char));
