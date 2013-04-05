@@ -42,14 +42,12 @@ int main(){
 	vga_init();
 	//init_rb(2, 1);
 	//changemode( notegame );
-
+	load_piano();
+	load_drums();
 	changemode( blank );
 	draw_sheetmusic();
 
 	mystate = ready;
-
-	//load_piano();
-	//pianoArr = pianoInit();
 
 	for(;;){
 		if (i%100 == 0 ){
@@ -65,6 +63,7 @@ int main(){
 			c = NULL;
 		}
 
+		/*
 		if (i%500 == 0){
 			update_rb( -2 );
 			draw_sheetmusic();
@@ -74,8 +73,7 @@ int main(){
 			//	changemode ( blank );
 			//}
 		}
-
-		playArr();
+		 */
 		i++;
 	}
 

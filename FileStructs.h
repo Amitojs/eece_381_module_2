@@ -21,14 +21,12 @@ typedef struct Wave{
 	unsigned int		samplerate;
 	unsigned short	samplesize;
 	unsigned char* songData;
-	bool loop;
 }Wave;
 
 typedef struct playingSong{
 
 	Wave* song;
 	int bytesPlayed;
-	bool finished;
 	struct playingSong* nextSong;
 
 }playingSong;

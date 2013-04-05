@@ -5,6 +5,7 @@
  *      Author: Leslie
  */
 
+#if 0
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -79,19 +80,6 @@ int main(){
 	//playSongNamed("test.wav");
 	//playSongNamed("dingding.wav");
 
-	//Testing song playback
-	/*
-	for(i=0; i<songCount; i++){
-		playSong(*(wavArr+i));
-		playSong(*(wavArr+i));
-	}
-
-	//Free the memory allocated to song data and the song array itself
-	for(i=0; i<songCount; i++){
-		free(*(wavArr+i));
-	}
-	free(wavArr);
-	 */
 	/*
 	//Testing song playback continued - filenames
 	printf("Now playing named\n");
@@ -102,3 +90,4 @@ int main(){
 	return 0;
 }
 
+#endif

@@ -150,7 +150,6 @@ void timed_function(){
 		printf("\nGot a message: ");
 		#endif
 	}
-
 	unsigned char message[MAX_STRING_SIZE] = "";
 	unsigned char* message_ptr = message;
 
@@ -242,7 +241,7 @@ void append ( unsigned char* s, char c ) {
 rsinfo rsinit (  ) {
 
 	printf("UART Initialization\n");
-	a.uart = alt_up_rs232_open_dev(RS232_0_NAME);
+	a.uart = alt_up_rs232_open_dev(RS232_NAME);
 	return a;
 }
 

@@ -176,7 +176,7 @@ int playSong(Wave* Song){
  * If the song has been defined as looping, will continuously play the song up to a limit.
  * Takes no arguments and returns the amplitude of the first value in the buffer which may be used for the equalizer
  */
-unsigned int playArr(void* context, alt_u32 id){
+void playArr(void* context, alt_u32 id){
 
 	int k;
 	int j;
@@ -239,12 +239,10 @@ unsigned int playArr(void* context, alt_u32 id){
 
 	}
 	//Play the buffer
-	while(alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_LEFT)<24);
 	alt_up_audio_write_fifo(audio_dev, (unsigned int*)buffer, 24, ALT_UP_AUDIO_LEFT);
-	while(alt_up_audio_write_fifo_space(audio_dev, ALT_UP_AUDIO_RIGHT)<24);
 	alt_up_audio_write_fifo(audio_dev, (unsigned int*)buffer, 24, ALT_UP_AUDIO_RIGHT);
 
-	return buffer[0];
+	return;
 
 }
 //If there is insufficient space return -1
